@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform, useMotionValue, useInView } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform, useMotionValue, useInView, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X } from 'lucide-react';
 
 // --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND WITH SHOOTING STARS ---
 const ParticleBackground = () => {
@@ -22,7 +22,6 @@ const ParticleBackground = () => {
     const numberOfParticles = 70;
     const shootingStars = [];
 
-    // Normal Particle
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
@@ -45,14 +44,13 @@ const ParticleBackground = () => {
       }
     }
 
-    // Shooting Star Class
     class ShootingStar {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height * 0.5;
         this.length = Math.random() * 80 + 10;
         this.speed = Math.random() * 10 + 5;
-        this.angle = Math.PI / 4; // 45 degrees
+        this.angle = Math.PI / 4; 
         this.opacity = 0;
         this.active = false;
         this.timer = Math.random() * 200;
@@ -62,7 +60,7 @@ const ParticleBackground = () => {
           this.timer--;
           if (this.timer <= 0) {
             this.active = true;
-            this.x = Math.random() * canvas.width * 0.5; // Start from left side mainly
+            this.x = Math.random() * canvas.width * 0.5; 
             this.y = Math.random() * canvas.height * 0.5;
             this.opacity = 1;
           }
@@ -72,7 +70,7 @@ const ParticleBackground = () => {
           this.opacity -= 0.02;
           if (this.opacity <= 0 || this.x > canvas.width || this.y > canvas.height) {
             this.active = false;
-            this.timer = Math.random() * 300 + 100; // Reset timer
+            this.timer = Math.random() * 300 + 100; 
           }
         }
       }
@@ -87,19 +85,15 @@ const ParticleBackground = () => {
       }
     }
 
-    // Init Particles
     for (let i = 0; i < numberOfParticles; i++) {
       particlesArray.push(new Particle());
     }
-    // Init Shooting Stars
     for (let i = 0; i < 3; i++) {
       shootingStars.push(new ShootingStar());
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw Particles & Connections
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
         particlesArray[i].draw();
@@ -117,13 +111,10 @@ const ParticleBackground = () => {
           }
         }
       }
-
-      // Draw Shooting Stars
       for (let i = 0; i < shootingStars.length; i++) {
         shootingStars[i].update();
         shootingStars[i].draw();
       }
-
       animationFrameId = requestAnimationFrame(animate);
     };
     animate();
@@ -137,7 +128,7 @@ const ParticleBackground = () => {
   return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-40" />;
 };
 
-// --- COMPONENT 2: HACKER TEXT EFFECT (NEW HERO ANIMATION) ---
+// --- COMPONENT 2: HACKER TEXT EFFECT ---
 const HackerText = ({ text, className }) => {
   const [displayText, setDisplayText] = useState(text);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
@@ -159,10 +150,8 @@ const HackerText = ({ text, className }) => {
       if (iterations >= text.length) {
         clearInterval(interval);
       }
-      
-      iterations += 1/3; // Speed control
+      iterations += 1/3; 
     }, 30);
-    
     return () => clearInterval(interval);
   }, [text]);
 
@@ -300,6 +289,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // STATE FOR MOBILE MENU
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 2000);
@@ -320,6 +310,8 @@ const App = () => {
     );
   }
 
+  const navLinks = ['Services', 'Process', 'Projects', 'FAQ'];
+
   return (
     <div className="bg-[#050505] text-white font-sans selection:bg-red-600 selection:text-white cursor-none overflow-x-hidden relative">
       
@@ -330,24 +322,64 @@ const App = () => {
       <div className="fixed top-0 left-0 w-6 h-6 bg-red-600 rounded-full pointer-events-none z-[100] hidden md:block mix-blend-screen blur-[2px]" style={{ left: mousePosition.x - 12, top: mousePosition.y - 12, transform: isHovering ? 'scale(3)' : 'scale(1)', transition: 'transform 0.1s' }} />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-orange-600 origin-left z-50" style={{ scaleX }} />
 
-      {/* --- NAVBAR --- */}
-      <nav className="fixed w-full z-40 px-6 py-6 flex justify-between items-center bg-black/50 backdrop-blur-md border-b border-white/5">
-        <div className="flex items-center gap-3" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+      {/* --- ADDED NAVBAR START --- */}
+      <nav className="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/60 backdrop-blur-lg border-b border-white/10 transition-all duration-300">
+        
+        {/* Logo Area */}
+        <div className="flex items-center gap-3 cursor-pointer" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
            <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
            <div className="hidden md:block">
-             <h1 className="font-bold text-lg tracking-tight leading-none">CALLISTO</h1>
+             <h1 className="font-bold text-lg tracking-tight leading-none text-white">CALLISTO</h1>
              <p className="text-[9px] text-gray-400 tracking-[0.2em]">SOFTWARE SOLUTION (PVT) LTD</p>
            </div>
         </div>
+
+        {/* Desktop Navigation (Hidden on Mobile) */}
         <div className="hidden md:flex gap-8 items-center">
-            {['Services', 'Process', 'Projects', 'FAQ'].map(item => (
-                <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-gray-300 hover:text-white transition-colors">{item}</a>
+            {navLinks.map((item) => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-gray-300 hover:text-red-500 transition-colors relative group">
+                   {item}
+                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
             ))}
-            <button className="px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-sm hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all">
+            <button className="px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-sm hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all transform hover:scale-105">
                 Book a Call
             </button>
         </div>
+
+        {/* Mobile Menu Button (Hamburger) */}
+        <div className="md:hidden text-white cursor-pointer hover:text-red-500 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center space-y-8 md:hidden"
+          >
+             {navLinks.map((item) => (
+               <a 
+                 key={item} 
+                 href={`#${item.toLowerCase()}`} 
+                 onClick={() => setIsMenuOpen(false)}
+                 className="text-3xl font-black text-white hover:text-red-600 transition-colors tracking-tighter"
+               >
+                 {item}
+               </a>
+             ))}
+             <button className="mt-8 px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl shadow-lg shadow-red-600/30">
+                Start a Project
+             </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* --- ADDED NAVBAR END --- */}
 
       {/* --- HERO SECTION WITH HACKER ANIMATION --- */}
       <section className="min-h-screen flex flex-col justify-center px-6 pt-20 relative">
@@ -457,13 +489,13 @@ const App = () => {
                 </p>
              </div>
              <div className="flex flex-col gap-4 items-start md:items-end">
-                <a href="#" className="text-2xl font-bold hover:text-red-500 transition-colors">callisto.lk</a>
-                <a href="#" className="text-2xl font-bold hover:text-red-500 transition-colors">+94 74 072 9268</a>
-                <p className="text-gray-500">Matara, Sri Lanka</p>
+                <a href="#" className="text-2xl font-bold hover:text-red-500 transition-colors">hello@callisto.lk</a>
+                <a href="#" className="text-2xl font-bold hover:text-red-500 transition-colors">+94 71 234 5678</a>
+                <p className="text-gray-500">Colombo, Sri Lanka</p>
              </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-gray-600 text-sm">
-             <p>© 2026 Callisto Software Solution (Pvt) Ltd. All Rights Reserved.</p>
+             <p>© 2024 Callisto Software Solution (Pvt) Ltd. All Rights Reserved.</p>
           </div>
       </footer>
     </div>
