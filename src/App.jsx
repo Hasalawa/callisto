@@ -367,11 +367,10 @@ const ProcessStep = ({ number, title, desc }) => {
   );
 };
 
-// --- COMPONENT 9: TEAM MEMBER CARD (NEW) ---
+// --- COMPONENT 9: TEAM MEMBER CARD ---
 const TeamMember = ({ name, role, img }) => {
   return (
     <div className="group relative bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden hover:border-red-600/50 transition-colors duration-500">
-       {/* Image Area */}
        <div className="h-[350px] w-full overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-10"/>
           <img 
@@ -381,12 +380,10 @@ const TeamMember = ({ name, role, img }) => {
           />
        </div>
 
-       {/* Details */}
        <div className="absolute bottom-0 left-0 w-full p-6 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
           <h3 className="text-2xl font-bold text-white mb-1">{name}</h3>
           <p className="text-red-500 font-mono text-sm tracking-widest uppercase mb-4">{role}</p>
           
-          {/* Socials - Reveal on Hover */}
           <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-red-600 hover:text-white transition-colors"><Linkedin size={18}/></a>
              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-red-600 hover:text-white transition-colors"><Twitter size={18}/></a>
@@ -405,7 +402,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setLoading(false), 2500); // 2.5s Loading
     const mouseMove = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", mouseMove);
     return () => window.removeEventListener("mousemove", mouseMove);
@@ -415,11 +412,17 @@ const App = () => {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
+  // --- UPDATED PRELOADER WITH LOGO ---
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
-         <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-6"/>
-         <h2 className="text-white font-black text-2xl tracking-widest uppercase animate-pulse">CALLISTO</h2>
+         {/* Logo Container */}
+         <div className="relative flex items-center justify-center mb-6">
+            <div className="absolute w-28 h-28 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin"></div>
+            <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse" />
+         </div>
+         <h2 className="text-white font-black text-2xl tracking-widest uppercase">CALLISTO</h2>
+         <p className="text-red-500 font-mono text-xs mt-2 tracking-[0.2em] animate-pulse">SYSTEM INITIALIZING...</p>
       </div>
     );
   }
@@ -578,7 +581,7 @@ const App = () => {
          </div>
       </section>
 
-      {/* --- TEAM SECTION (NEW) --- */}
+      {/* --- TEAM SECTION --- */}
       <section id="team" className="py-32 px-6 bg-neutral-900/20 border-t border-white/5">
          <div className="max-w-7xl mx-auto">
              <RevealOnScroll>
