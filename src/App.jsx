@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform, useMotionValue, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X } from 'lucide-react';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND WITH SHOOTING STARS ---
+// --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND ---
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
 
@@ -191,39 +191,94 @@ const SpotlightCard = ({ children, className = "" }) => {
   );
 };
 
-// --- COMPONENT 4: 3D TILT CARD ---
-const TiltCard = ({ title, category, description }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [30, -30]);
-  const rotateY = useTransform(x, [-100, 100], [-30, 30]);
+// --- COMPONENT 4: 3D CAROUSEL (NEW FEATURE) ---
+const ThreeDCarousel = () => {
+  const [active, setActive] = useState(1);
+  const cards = [
+    { id: 1, title: "FinTech Core", category: "Banking System", desc: "Secure banking portal with 256-bit encryption & AI fraud detection." },
+    { id: 2, title: "AeroNav AI", category: "Drone Tech", desc: "Autonomous navigation system for commercial drones using Computer Vision." },
+    { id: 3, title: "MediSync", category: "Healthcare", desc: "Hospital management system with AI diagnostics and Cloud Sync." },
+    { id: 4, title: "CyberShield", category: "Security", desc: "Enterprise-grade firewall and threat detection dashboard." },
+    { id: 5, title: "ShopNext", category: "E-Commerce", desc: "Next-gen headless e-commerce platform with AR product preview." }
+  ];
+
+  const handleNext = () => {
+    setActive((prev) => (prev + 1) % cards.length);
+  };
+
+  const handlePrev = () => {
+    setActive((prev) => (prev - 1 + cards.length) % cards.length);
+  };
+
+  const getCardStyles = (index) => {
+    const diff = (index - active + cards.length) % cards.length;
+    const center = Math.floor(cards.length / 2);
+    // Calculate distance from center (handling wrap-around)
+    let dist = diff;
+    if (diff > center) dist = diff - cards.length;
+    
+    // 3D Visuals
+    const isActive = dist === 0;
+    const xOffset = dist * 150; // Distance between cards
+    const scale = 1 - Math.abs(dist) * 0.2;
+    const opacity = 1 - Math.abs(dist) * 0.3;
+    const zIndex = 10 - Math.abs(dist);
+    const rotateY = dist * -25; // Rotate based on position
+
+    return {
+      x: xOffset,
+      scale,
+      opacity: Math.abs(dist) > 2 ? 0 : opacity, // Hide distant cards
+      zIndex,
+      rotateY,
+      filter: isActive ? 'blur(0px)' : 'blur(4px)',
+      pointerEvents: isActive ? 'auto' : 'none'
+    };
+  };
 
   return (
-    <motion.div
-      style={{ x, y, rotateX, rotateY, z: 100 }}
-      drag
-      dragElastic={0.16}
-      dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      whileHover={{ cursor: "grabbing" }}
-      className="w-full h-[400px] bg-neutral-900/80 backdrop-blur-sm border border-white/10 rounded-3xl p-8 relative overflow-hidden group perspective-1000 shadow-xl"
-    >
-      <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      <div className="relative z-10 flex flex-col h-full justify-between pointer-events-none">
-        <div>
-           <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg shadow-red-600/20">
-              <Code size={24} />
-           </div>
-           <h3 className="text-3xl font-bold text-white mb-2">{title}</h3>
-           <p className="text-red-500 font-mono text-sm tracking-wider">{category}</p>
-        </div>
-        <div className="space-y-4">
-           <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
-           <div className="flex items-center gap-2 text-white font-bold text-sm group-hover:translate-x-2 transition-transform">
-             VIEW CASE STUDY <ArrowUpRight size={16} />
-           </div>
-        </div>
-      </div>
-    </motion.div>
+    <div className="relative h-[500px] w-full flex items-center justify-center perspective-1000">
+       <div className="relative w-full max-w-3xl h-full flex items-center justify-center">
+          {cards.map((card, index) => {
+             const styles = getCardStyles(index);
+             return (
+                <motion.div
+                   key={card.id}
+                   animate={styles}
+                   transition={{ type: "spring", stiffness: 150, damping: 20 }}
+                   className="absolute w-[350px] md:w-[400px] h-[450px] bg-neutral-900 border border-white/10 rounded-3xl p-8 flex flex-col justify-between shadow-2xl shadow-black/80"
+                   style={{ transformStyle: 'preserve-3d' }}
+                >
+                   {/* Card Content */}
+                   <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 to-transparent pointer-events-none rounded-3xl"></div>
+                   <div>
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg shadow-red-600/20">
+                         <Code size={24} />
+                      </div>
+                      <h3 className="text-3xl font-bold text-white mb-2">{card.title}</h3>
+                      <p className="text-red-500 font-mono text-sm tracking-wider uppercase">{card.category}</p>
+                   </div>
+                   <div className="space-y-4">
+                      <p className="text-gray-400 text-sm leading-relaxed">{card.desc}</p>
+                      <button className="flex items-center gap-2 text-white font-bold text-sm hover:text-red-500 transition-colors">
+                        VIEW PROJECT <ArrowUpRight size={16} />
+                      </button>
+                   </div>
+                </motion.div>
+             );
+          })}
+       </div>
+
+       {/* Carousel Controls */}
+       <div className="absolute bottom-[-40px] flex gap-4 z-20">
+          <button onClick={handlePrev} className="p-3 rounded-full bg-neutral-800 border border-white/10 hover:bg-red-600 hover:text-white transition-all">
+             <ChevronLeft size={24} />
+          </button>
+          <button onClick={handleNext} className="p-3 rounded-full bg-neutral-800 border border-white/10 hover:bg-red-600 hover:text-white transition-all">
+             <ChevronRight size={24} />
+          </button>
+       </div>
+    </div>
   );
 };
 
@@ -289,7 +344,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // STATE FOR MOBILE MENU
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 2000);
@@ -322,10 +377,8 @@ const App = () => {
       <div className="fixed top-0 left-0 w-6 h-6 bg-red-600 rounded-full pointer-events-none z-[100] hidden md:block mix-blend-screen blur-[2px]" style={{ left: mousePosition.x - 12, top: mousePosition.y - 12, transform: isHovering ? 'scale(3)' : 'scale(1)', transition: 'transform 0.1s' }} />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-orange-600 origin-left z-50" style={{ scaleX }} />
 
-      {/* --- ADDED NAVBAR START --- */}
+      {/* --- NAVBAR --- */}
       <nav className="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/60 backdrop-blur-lg border-b border-white/10 transition-all duration-300">
-        
-        {/* Logo Area */}
         <div className="flex items-center gap-3 cursor-pointer" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
            <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
            <div className="hidden md:block">
@@ -334,7 +387,6 @@ const App = () => {
            </div>
         </div>
 
-        {/* Desktop Navigation (Hidden on Mobile) */}
         <div className="hidden md:flex gap-8 items-center">
             {navLinks.map((item) => (
                 <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-gray-300 hover:text-red-500 transition-colors relative group">
@@ -347,7 +399,6 @@ const App = () => {
             </button>
         </div>
 
-        {/* Mobile Menu Button (Hamburger) */}
         <div className="md:hidden text-white cursor-pointer hover:text-red-500 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </div>
@@ -379,9 +430,8 @@ const App = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* --- ADDED NAVBAR END --- */}
 
-      {/* --- HERO SECTION WITH HACKER ANIMATION --- */}
+      {/* --- HERO SECTION --- */}
       <section className="min-h-screen flex flex-col justify-center px-6 pt-20 relative">
         <div className="max-w-7xl mx-auto w-full z-10">
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -389,14 +439,12 @@ const App = () => {
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                   <span className="text-xs font-mono text-gray-300">SYSTEM ONLINE</span>
               </div>
-              
               <h1 className="text-5xl md:text-9xl font-black tracking-tighter leading-none text-white mb-6">
                 <HackerText text="DIGITAL" className="block" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
                   <HackerText text="EVOLUTION." className="" />
                 </span>
               </h1>
-              
               <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mt-6 border-l-4 border-red-600 pl-6">
                  <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
               </p>
@@ -455,15 +503,14 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- 3D PROJECTS --- */}
-      <section id="projects" className="py-32 px-6">
+      {/* --- 3D PROJECTS CAROUSEL (NEW FEATURE) --- */}
+      <section id="projects" className="py-32 px-6 overflow-hidden">
          <div className="max-w-7xl mx-auto">
-            <h2 className="text-5xl font-black mb-16">FEATURED WORK</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-               <TiltCard title="FinTech Core" category="Banking" description="Secure banking portal with 256-bit encryption." />
-               <TiltCard title="AeroNav AI" category="Drone Tech" description="Autonomous navigation system for commercial drones." />
-               <TiltCard title="MediSync" category="Healthcare" description="Hospital management system with AI diagnostics." />
-            </div>
+            <h2 className="text-5xl font-black mb-16 text-center">FEATURED WORK</h2>
+            
+            {/* 3D Carousel Implementation */}
+            <ThreeDCarousel />
+
          </div>
       </section>
 
