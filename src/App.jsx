@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence, useMotionValue, useAnimationFrame } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity, Send, MapPin, Phone } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity, Send, MapPin, Phone, Check, Star, User } from 'lucide-react';
 
 // --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND ---
 const ParticleBackground = () => {
@@ -404,20 +404,12 @@ const TeamMember = ({ name, role, img }) => {
   )
 }
 
-// --- COMPONENT 10: HERO GRAPHIC (CYBER CORE) ---
+// --- COMPONENT 10: HERO GRAPHIC ---
 const HeroGraphic = () => {
   return (
     <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] hidden md:flex items-center justify-center pointer-events-none select-none">
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="absolute w-full h-full rounded-full border border-red-600/20 border-dashed"
-      />
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute w-[80%] h-[80%] rounded-full border-2 border-orange-600/30 border-dotted"
-      />
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute w-full h-full rounded-full border border-red-600/20 border-dashed"/>
+      <motion.div animate={{ rotate: -360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute w-[80%] h-[80%] rounded-full border-2 border-orange-600/30 border-dotted"/>
       <div className="absolute w-32 h-32 bg-gradient-to-br from-red-600 to-orange-600 rounded-full blur-[60px] opacity-40 animate-pulse" />
       <div className="relative z-10 flex flex-col items-center justify-center">
         <Shield size={100} className="text-red-500 drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
@@ -430,7 +422,7 @@ const HeroGraphic = () => {
   );
 };
 
-// --- COMPONENT 11: ANIMATED COUNTER (NEW) ---
+// --- COMPONENT 11: ANIMATED COUNTER ---
 const Counter = ({ from, to, label }) => {
   const nodeRef = useRef();
   const isInView = useInView(nodeRef, { once: false, margin: "-100px" });
@@ -458,6 +450,33 @@ const Counter = ({ from, to, label }) => {
     </div>
   );
 };
+
+// --- COMPONENT 12: PRICING CARD (NEW) ---
+const PricingCard = ({ title, price, features, recommended = false }) => {
+  return (
+    <SpotlightCard className={`p-8 flex flex-col h-full ${recommended ? 'border-red-600 shadow-[0_0_30px_rgba(220,38,38,0.2)]' : ''}`}>
+       <div className="relative z-10 flex flex-col h-full">
+          {recommended && <span className="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">RECOMMENDED</span>}
+          <h3 className="text-xl font-bold text-gray-400 mb-2">{title}</h3>
+          <div className="flex items-baseline gap-1 mb-6">
+             <span className="text-4xl font-black text-white">${price}</span>
+             <span className="text-gray-500">/project</span>
+          </div>
+          <ul className="space-y-4 mb-8 flex-1">
+             {features.map((feat, i) => (
+                <li key={i} className="flex items-center gap-3 text-gray-300 text-sm">
+                   <div className="w-5 h-5 rounded-full bg-red-600/20 flex items-center justify-center text-red-500 flex-shrink-0"><Check size={12}/></div>
+                   {feat}
+                </li>
+             ))}
+          </ul>
+          <button className={`w-full py-3 rounded-xl font-bold transition-all ${recommended ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
+             Choose Plan
+          </button>
+       </div>
+    </SpotlightCard>
+  )
+}
 
 // --- MAIN APP ---
 const App = () => {
@@ -490,7 +509,7 @@ const App = () => {
     );
   }
 
-  const navLinks = ['Services', 'Process', 'Projects', 'Team', 'Contact'];
+  const navLinks = ['Services', 'Process', 'Projects', 'Pricing', 'Team', 'Contact'];
 
   return (
     <div className="bg-[#050505] text-white font-sans selection:bg-red-600 selection:text-white cursor-none overflow-x-hidden relative">
@@ -593,7 +612,7 @@ const App = () => {
           <InfiniteLogos />
       </div>
 
-      {/* --- STATS SECTION (NEW) --- */}
+      {/* --- STATS SECTION --- */}
       <section className="py-20 px-6 border-b border-white/5">
          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
             <Counter from={0} to={85} label="Projects" />
@@ -666,6 +685,73 @@ const App = () => {
          </div>
       </section>
 
+      {/* --- PRICING SECTION (NEW) --- */}
+      <section id="pricing" className="py-32 px-6 bg-neutral-900/20">
+         <div className="max-w-7xl mx-auto">
+            <RevealOnScroll>
+                <div className="mb-20 text-center">
+                    <span className="text-red-500 font-mono text-sm tracking-widest uppercase">/// Investment</span>
+                    <h2 className="text-4xl md:text-5xl font-black mt-4">PRICING PLANS</h2>
+                    <p className="text-gray-400 mt-4">Transparent pricing for world-class engineering.</p>
+                </div>
+            </RevealOnScroll>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+               <RevealOnScroll delay={0.1}>
+                  <PricingCard 
+                     title="Startup" 
+                     price="1,500" 
+                     features={["Single Page Application", "Basic SEO Setup", "1 Month Support", "Mobile Responsive"]} 
+                  />
+               </RevealOnScroll>
+               <RevealOnScroll delay={0.2}>
+                  <PricingCard 
+                     title="Business" 
+                     price="3,500" 
+                     recommended={true}
+                     features={["Multi-page Web App", "CMS Integration", "Advanced Security", "3 Months Support", "API Integration"]} 
+                  />
+               </RevealOnScroll>
+               <RevealOnScroll delay={0.3}>
+                  <PricingCard 
+                     title="Enterprise" 
+                     price="Custom" 
+                     features={["Full SaaS Platform", "AI & ML Integration", "Cloud Architecture", "24/7 Dedicated Support", "Audited Security"]} 
+                  />
+               </RevealOnScroll>
+            </div>
+         </div>
+      </section>
+
+      {/* --- TESTIMONIALS SECTION (NEW) --- */}
+      <section id="testimonials" className="py-32 px-6 border-t border-white/5">
+         <div className="max-w-7xl mx-auto">
+            <RevealOnScroll>
+               <h2 className="text-4xl font-black mb-16 text-center">CLIENT VOICES</h2>
+            </RevealOnScroll>
+            <div className="grid md:grid-cols-2 gap-8">
+               {[
+                  { name: "John Carter", company: "CEO, TechFlow", text: "Callisto's security audit saved us from a potential breach. Their attention to detail is unmatched in the industry." },
+                  { name: "Sarah Williams", company: "Director, InnovateX", text: "The team delivered our AI platform weeks ahead of schedule. The code quality and performance are world-class." }
+               ].map((t, i) => (
+                  <RevealOnScroll key={i} delay={i * 0.1}>
+                     <div className="p-8 bg-neutral-900 border border-white/10 rounded-2xl relative">
+                        <div className="absolute top-[-15px] left-8 bg-red-600 text-white p-2 rounded-full"><Star size={20} fill="currentColor"/></div>
+                        <p className="text-gray-300 italic mb-6 text-lg">"{t.text}"</p>
+                        <div className="flex items-center gap-4">
+                           <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center"><User /></div>
+                           <div>
+                              <h4 className="font-bold text-white">{t.name}</h4>
+                              <p className="text-red-500 text-sm">{t.company}</p>
+                           </div>
+                        </div>
+                     </div>
+                  </RevealOnScroll>
+               ))}
+            </div>
+         </div>
+      </section>
+
       {/* --- TEAM SECTION --- */}
       <section id="team" className="py-32 px-6 bg-neutral-900/20 border-t border-white/5">
          <div className="max-w-7xl mx-auto">
@@ -703,7 +789,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- CONTACT SECTION (NEW) --- */}
+      {/* --- CONTACT SECTION --- */}
       <section id="contact" className="py-32 px-6 relative overflow-hidden">
          <div className="absolute top-0 left-0 w-full h-full bg-red-900/5 -z-10 skew-y-3 transform origin-top-left"></div>
          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
@@ -731,17 +817,17 @@ const App = () => {
                <div className="bg-neutral-900/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl">
                   <div className="space-y-4">
                      <div className="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="Name" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
-                        <input type="text" placeholder="Company" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
+                        <input type="text" placeholder="Name" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-white" />
+                        <input type="text" placeholder="Company" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-white" />
                      </div>
-                     <input type="email" placeholder="Email Address" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
+                     <input type="email" placeholder="Email Address" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-white" />
                      <select className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-gray-400">
                         <option>Select Service</option>
                         <option>Web Development</option>
                         <option>Cyber Security</option>
                         <option>Mobile App</option>
                      </select>
-                     <textarea rows="4" placeholder="Tell us about your project" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors"></textarea>
+                     <textarea rows="4" placeholder="Tell us about your project" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-white"></textarea>
                      <button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all">
                         SEND MESSAGE <Send size={18}/>
                      </button>
