@@ -404,29 +404,25 @@ const TeamMember = ({ name, role, img }) => {
   )
 }
 
-// --- NEW COMPONENT: HERO GRAPHIC (CYBER CORE) ---
+// --- COMPONENT 10: HERO GRAPHIC (CYBER CORE) ---
 const HeroGraphic = () => {
   return (
     <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] hidden md:flex items-center justify-center pointer-events-none select-none">
-      {/* Outer Rotating Ring */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
         className="absolute w-full h-full rounded-full border border-red-600/20 border-dashed"
       />
-      {/* Inner Rotating Ring (Opposite Direction) */}
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute w-[80%] h-[80%] rounded-full border-2 border-orange-600/30 border-dotted"
       />
-      {/* Central Glowing Core & Shield */}
       <div className="absolute w-32 h-32 bg-gradient-to-br from-red-600 to-orange-600 rounded-full blur-[60px] opacity-40 animate-pulse" />
       <div className="relative z-10 flex flex-col items-center justify-center">
         <Shield size={100} className="text-red-500 drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
         <Activity size={30} className="text-orange-400 mt-4 animate-pulse" />
       </div>
-      {/* Orbiting Data Points */}
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute w-[60%] h-[60%] rounded-full">
          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-red-500 rounded-full blur-[2px]"></div>
       </motion.div>
@@ -453,13 +449,14 @@ const App = () => {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  // --- PRELOADER WITH LOGO ---
+  // --- PRELOADER WITH ROUNDED LOGO ---
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
          <div className="relative flex items-center justify-center mb-6">
             <div className="absolute w-28 h-28 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin"></div>
-            <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse" />
+            {/* Added rounded-full here */}
+            <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse rounded-full" />
          </div>
          <h2 className="text-white font-black text-2xl tracking-widest uppercase">CALLISTO</h2>
          <p className="text-red-500 font-mono text-xs mt-2 tracking-[0.2em] animate-pulse">SYSTEM INITIALIZING...</p>
@@ -477,14 +474,14 @@ const App = () => {
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-orange-600 origin-left z-50" style={{ scaleX }} />
       <motion.div className="fixed top-0 left-0 bottom-0 w-1 bg-red-600 origin-top z-50 shadow-[0_0_15px_rgba(220,38,38,0.8)] hidden md:block" style={{ scaleY }} />
 
-      {/* Cyber Grid Floor (Subtle) */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#220000_1px,transparent_1px),linear-gradient(to_bottom,#220000_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000_70%,transparent_100%)] opacity-20"></div>
 
 
       {/* --- NAVBAR --- */}
       <nav className="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/60 backdrop-blur-lg border-b border-white/10 transition-all duration-300">
         <div className="flex items-center gap-3 cursor-pointer" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-           <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
+           {/* Added rounded-full here */}
+           <img src="/logo.png" alt="Logo" className="h-10 w-auto rounded-full" />
            <div className="hidden md:block">
              <h1 className="font-bold text-lg tracking-tight leading-none text-white">CALLISTO</h1>
              <p className="text-[9px] text-gray-400 tracking-[0.2em]">SOFTWARE SOLUTION (PVT) LTD</p>
@@ -535,14 +532,12 @@ const App = () => {
         )}
       </AnimatePresence>
 
-      {/* --- HERO SECTION (UPDATED) --- */}
+      {/* --- HERO SECTION --- */}
       <section className="min-h-screen flex flex-col justify-center px-6 pt-20 relative">
-        {/* Floating UI Elements */}
         <div className="absolute top-1/4 right-1/4 text-red-500/30 font-mono text-xs animate-pulse hidden md:block pointer-events-none select-none">/// NETWORK_STATUS: STABLE</div>
         <div className="absolute bottom-1/4 left-1/3 text-red-500/30 font-mono text-xs animate-pulse delay-700 hidden md:block pointer-events-none select-none">[+] ENCRYPTED_CONN: ACTIVE</div>
 
         <div className="max-w-7xl mx-auto w-full z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-          {/* Left Content */}
           <div className="flex-1">
             <RevealOnScroll>
                 <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/5 border border-white/10">
@@ -559,14 +554,12 @@ const App = () => {
                   <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
                 </p>
                 
-                {/* CTA Button */}
                 <button className="mt-10 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all flex items-center gap-2 group">
                   EXPLORE PLATFORM <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
             </RevealOnScroll>
           </div>
 
-          {/* Right Graphic (New) */}
           <RevealOnScroll delay={0.2}>
              <HeroGraphic />
           </RevealOnScroll>
@@ -685,7 +678,8 @@ const App = () => {
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 mb-20">
              <RevealOnScroll>
                  <div>
-                    <img src="/logo.png" alt="Logo" className="h-16 w-auto mb-6 opacity-80" />
+                    {/* Added rounded-full here */}
+                    <img src="/logo.png" alt="Logo" className="h-16 w-auto mb-6 opacity-80 rounded-full" />
                     <h2 className="text-3xl font-bold mb-4">Let's Build the Future.</h2>
                     <p className="text-gray-500 max-w-sm">
                        Callisto Software Solution (Pvt) Ltd.<br/>
