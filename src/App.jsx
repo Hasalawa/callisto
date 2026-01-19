@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence, useMotionValue, useAnimationFrame } from 'framer-motion';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity, Send, MapPin, Phone } from 'lucide-react';
 
 // --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND ---
 const ParticleBackground = () => {
@@ -430,6 +430,34 @@ const HeroGraphic = () => {
   );
 };
 
+// --- COMPONENT 11: ANIMATED COUNTER (NEW) ---
+const Counter = ({ from, to, label }) => {
+  const nodeRef = useRef();
+  const isInView = useInView(nodeRef, { once: false, margin: "-100px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+    const node = nodeRef.current;
+    const controls = { duration: 2000, easing: "ease-out" };
+    let startTime = null;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / controls.duration, 1);
+      node.textContent = Math.floor(progress * (to - from) + from);
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  }, [from, to, isInView]);
+
+  return (
+    <div className="text-center p-6 bg-neutral-900 border border-white/10 rounded-2xl hover:border-red-600 transition-colors duration-500">
+      <div className="text-5xl font-black text-white mb-2 flex justify-center items-baseline">
+        <span ref={nodeRef}>{from}</span><span className="text-red-600">+</span>
+      </div>
+      <div className="text-gray-400 text-sm uppercase tracking-widest font-mono">{label}</div>
+    </div>
+  );
+};
 
 // --- MAIN APP ---
 const App = () => {
@@ -449,13 +477,11 @@ const App = () => {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  // --- PRELOADER WITH ROUNDED LOGO ---
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
          <div className="relative flex items-center justify-center mb-6">
             <div className="absolute w-28 h-28 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin"></div>
-            {/* Added rounded-full here */}
             <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse rounded-full" />
          </div>
          <h2 className="text-white font-black text-2xl tracking-widest uppercase">CALLISTO</h2>
@@ -464,7 +490,7 @@ const App = () => {
     );
   }
 
-  const navLinks = ['Services', 'Process', 'Projects', 'Team', 'FAQ'];
+  const navLinks = ['Services', 'Process', 'Projects', 'Team', 'Contact'];
 
   return (
     <div className="bg-[#050505] text-white font-sans selection:bg-red-600 selection:text-white cursor-none overflow-x-hidden relative">
@@ -476,11 +502,9 @@ const App = () => {
 
       <div className="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#220000_1px,transparent_1px),linear-gradient(to_bottom,#220000_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000_70%,transparent_100%)] opacity-20"></div>
 
-
       {/* --- NAVBAR --- */}
       <nav className="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/60 backdrop-blur-lg border-b border-white/10 transition-all duration-300">
         <div className="flex items-center gap-3 cursor-pointer" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-           {/* Added rounded-full here */}
            <img src="/logo.png" alt="Logo" className="h-10 w-auto rounded-full" />
            <div className="hidden md:block">
              <h1 className="font-bold text-lg tracking-tight leading-none text-white">CALLISTO</h1>
@@ -553,13 +577,11 @@ const App = () => {
                 <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mt-8 border-l-4 border-red-600 pl-6">
                   <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
                 </p>
-                
                 <button className="mt-10 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all flex items-center gap-2 group">
                   EXPLORE PLATFORM <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
             </RevealOnScroll>
           </div>
-
           <RevealOnScroll delay={0.2}>
              <HeroGraphic />
           </RevealOnScroll>
@@ -571,6 +593,16 @@ const App = () => {
           <InfiniteLogos />
       </div>
 
+      {/* --- STATS SECTION (NEW) --- */}
+      <section className="py-20 px-6 border-b border-white/5">
+         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+            <Counter from={0} to={85} label="Projects" />
+            <Counter from={0} to={12} label="Countries" />
+            <Counter from={0} to={99} label="Satisfaction" />
+            <Counter from={0} to={24} label="Support (Hrs)" />
+         </div>
+      </section>
+
       {/* --- SERVICES --- */}
       <section id="services" className="py-32 px-6">
          <div className="max-w-7xl mx-auto">
@@ -580,7 +612,6 @@ const App = () => {
                     <h2 className="text-4xl md:text-6xl font-bold mt-4">CORE SERVICES</h2>
                 </div>
             </RevealOnScroll>
-            
             <div className="grid md:grid-cols-3 gap-6">
                {[
                    { icon: Shield, title: "Cyber Security", desc: "Vulnerability assessment & penetration testing." },
@@ -645,7 +676,6 @@ const App = () => {
                     <p className="text-gray-400 mt-4 max-w-2xl mx-auto">The elite engineers and strategists behind Callisto's digital dominance.</p>
                 </div>
              </RevealOnScroll>
-
              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {[
                    { name: "Kehan Hasalawa", role: "Founder / CEO", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" },
@@ -673,12 +703,59 @@ const App = () => {
         </div>
       </section>
 
+      {/* --- CONTACT SECTION (NEW) --- */}
+      <section id="contact" className="py-32 px-6 relative overflow-hidden">
+         <div className="absolute top-0 left-0 w-full h-full bg-red-900/5 -z-10 skew-y-3 transform origin-top-left"></div>
+         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <RevealOnScroll>
+               <h2 className="text-5xl font-black mb-6">READY TO <br/><span className="text-red-600">START?</span></h2>
+               <p className="text-gray-400 text-lg mb-8">Reach out to us for a consultation. Whether it's a new project or a security audit, we are here to help.</p>
+               
+               <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-red-500"><Phone /></div>
+                     <div><p className="text-sm text-gray-500">Call Us</p><p className="font-bold text-lg">+94 71 234 5678</p></div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-red-500"><Mail /></div>
+                     <div><p className="text-sm text-gray-500">Email Us</p><p className="font-bold text-lg">hello@callisto.lk</p></div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-red-500"><MapPin /></div>
+                     <div><p className="text-sm text-gray-500">Visit Us</p><p className="font-bold text-lg">Colombo, Sri Lanka</p></div>
+                  </div>
+               </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll delay={0.2}>
+               <div className="bg-neutral-900/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl">
+                  <div className="space-y-4">
+                     <div className="grid grid-cols-2 gap-4">
+                        <input type="text" placeholder="Name" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
+                        <input type="text" placeholder="Company" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
+                     </div>
+                     <input type="email" placeholder="Email Address" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors" />
+                     <select className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors text-gray-400">
+                        <option>Select Service</option>
+                        <option>Web Development</option>
+                        <option>Cyber Security</option>
+                        <option>Mobile App</option>
+                     </select>
+                     <textarea rows="4" placeholder="Tell us about your project" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-600 transition-colors"></textarea>
+                     <button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                        SEND MESSAGE <Send size={18}/>
+                     </button>
+                  </div>
+               </div>
+            </RevealOnScroll>
+         </div>
+      </section>
+
       {/* --- FOOTER --- */}
       <footer className="bg-black pt-32 pb-10 relative z-10">
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 mb-20">
              <RevealOnScroll>
                  <div>
-                    {/* Added rounded-full here */}
                     <img src="/logo.png" alt="Logo" className="h-16 w-auto mb-6 opacity-80 rounded-full" />
                     <h2 className="text-3xl font-bold mb-4">Let's Build the Future.</h2>
                     <p className="text-gray-500 max-w-sm">
