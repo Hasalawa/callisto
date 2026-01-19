@@ -367,24 +367,37 @@ const ProcessStep = ({ number, title, desc }) => {
   );
 };
 
-// --- COMPONENT 9: TEAM MEMBER CARD ---
+// --- COMPONENT 9: TEAM MEMBER CARD (UPDATED: AUTO SCROLL EFFECT ON MOBILE) ---
 const TeamMember = ({ name, role, img }) => {
+  const ref = useRef(null);
+  // Detects if the card is in view (approx middle of screen) for mobile animation
+  const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
+
   return (
-    <div className="group relative bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden hover:border-red-600/50 transition-colors duration-500">
+    <div ref={ref} className="group relative bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden hover:border-red-600/50 transition-colors duration-500">
        <div className="h-[350px] w-full overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-10"/>
           <img 
             src={img} 
             alt={name} 
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+            // Logic: On Mobile/Scroll (isInView), force color & scale. On Desktop (md), use group-hover.
+            className={`w-full h-full object-cover transition-all duration-700 
+              ${isInView ? 'grayscale-0 scale-110' : 'grayscale scale-100'} 
+              md:grayscale md:scale-100 md:group-hover:grayscale-0 md:group-hover:scale-110`}
           />
        </div>
 
-       <div className="absolute bottom-0 left-0 w-full p-6 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+       <div className={`absolute bottom-0 left-0 w-full p-6 z-20 transition-transform duration-500
+            ${isInView ? 'translate-y-0' : 'translate-y-4'}
+            md:translate-y-4 md:group-hover:translate-y-0`}>
+          
           <h3 className="text-2xl font-bold text-white mb-1">{name}</h3>
           <p className="text-red-500 font-mono text-sm tracking-widest uppercase mb-4">{role}</p>
           
-          <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+          {/* Socials - Reveal on Scroll (Mobile) or Hover (Desktop) */}
+          <div className={`flex gap-4 transition-opacity duration-500 delay-100
+               ${isInView ? 'opacity-100' : 'opacity-0'}
+               md:opacity-0 md:group-hover:opacity-100`}>
              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-red-600 hover:text-white transition-colors"><Linkedin size={18}/></a>
              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-red-600 hover:text-white transition-colors"><Twitter size={18}/></a>
              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-red-600 hover:text-white transition-colors"><Mail size={18}/></a>
@@ -412,11 +425,10 @@ const App = () => {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  // --- UPDATED PRELOADER WITH LOGO ---
+  // --- PRELOADER WITH LOGO ---
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
-         {/* Logo Container */}
          <div className="relative flex items-center justify-center mb-6">
             <div className="absolute w-28 h-28 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin"></div>
             <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse" />
