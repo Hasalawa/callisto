@@ -213,42 +213,83 @@ const SpotlightCard = ({ children, className = "" }) => {
   );
 };
 
-// --- COMPONENT 5: NEW CYBER SERVICE CARD (NEW ATTRACTIVE DESIGN) ---
+// --- COMPONENT 5: NEW CYBER SERVICE CARD (SMART RESPONSIVE LOGIC) ---
 const CyberServiceCard = ({ icon: Icon, title, desc, index }) => {
+  const ref = useRef(null);
+  // Detect center screen focus for mobile
+  const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
+
   return (
-    <div className="group relative h-full bg-neutral-900 border border-white/10 overflow-hidden hover:border-red-600/50 transition-all duration-500 rounded-none md:rounded-tr-[3rem] md:rounded-bl-[3rem]">
+    <div ref={ref} className={`group relative h-full bg-neutral-900 border overflow-hidden transition-all duration-500 rounded-none md:rounded-tr-[3rem] md:rounded-bl-[3rem]
+        ${isInView ? 'border-red-600/50' : 'border-white/10'} 
+        md:border-white/10 md:hover:border-red-600/50
+    `}>
       
       {/* Background Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_14px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className={`absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_14px] transition-opacity duration-500
+          ${isInView ? 'opacity-100' : 'opacity-0'}
+          md:opacity-0 md:group-hover:opacity-100
+      `}></div>
       
-      {/* Red Glow on Hover */}
-      <div className="absolute inset-0 bg-gradient-to-b from-red-900/0 via-red-900/0 to-red-900/0 group-hover:via-red-900/5 group-hover:to-red-900/10 transition-all duration-500"></div>
+      {/* Red Glow */}
+      <div className={`absolute inset-0 bg-gradient-to-b from-red-900/0 transition-all duration-500
+          ${isInView ? 'via-red-900/5 to-red-900/10' : 'via-red-900/0 to-red-900/0'}
+          md:via-red-900/0 md:to-red-900/0 md:group-hover:via-red-900/5 md:group-hover:to-red-900/10
+      `}></div>
       
       {/* Decorative Corners */}
-      <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-white/10 group-hover:border-red-600 transition-colors duration-500"></div>
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-white/10 group-hover:border-red-600 transition-colors duration-500"></div>
+      <div className={`absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 transition-colors duration-500
+          ${isInView ? 'border-red-600' : 'border-white/10'}
+          md:border-white/10 md:group-hover:border-red-600
+      `}></div>
+      <div className={`absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 transition-colors duration-500
+          ${isInView ? 'border-red-600' : 'border-white/10'}
+          md:border-white/10 md:group-hover:border-red-600
+      `}></div>
 
       <div className="relative p-8 z-10 flex flex-col h-full">
          <div className="flex justify-between items-start mb-8">
-            <div className="w-14 h-14 bg-white/5 border border-white/10 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white group-hover:border-red-500 transition-all duration-500 shadow-lg group-hover:shadow-red-600/20">
+            <div className={`w-14 h-14 border flex items-center justify-center transition-all duration-500 shadow-lg
+                ${isInView ? 'bg-red-600 text-white border-red-500 shadow-red-600/20' : 'bg-white/5 border-white/10 text-red-600'}
+                md:bg-white/5 md:text-red-600 md:border-white/10
+                md:group-hover:bg-red-600 md:group-hover:text-white md:group-hover:border-red-500 md:group-hover:shadow-red-600/20
+            `}>
                <Icon size={28} strokeWidth={1.5} />
             </div>
-            <span className="font-mono text-xs text-gray-700 group-hover:text-red-500/50 transition-colors">SYS_0{index + 1}</span>
+            <span className={`font-mono text-xs transition-colors
+                ${isInView ? 'text-red-500/50' : 'text-gray-700'}
+                md:text-gray-700 md:group-hover:text-red-500/50
+            `}>SYS_0{index + 1}</span>
          </div>
          
-         <h3 className="text-2xl font-bold text-white mb-4 group-hover:translate-x-2 transition-transform duration-300 flex items-center gap-2">
+         <h3 className={`text-2xl font-bold text-white mb-4 transition-transform duration-300 flex items-center gap-2
+             ${isInView ? 'translate-x-2' : 'translate-x-0'}
+             md:translate-x-0 md:group-hover:translate-x-2
+         `}>
             {title}
          </h3>
-         <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1 border-l-2 border-white/5 pl-4 group-hover:border-red-600/30 transition-colors">
+         <p className={`text-gray-400 text-sm leading-relaxed mb-6 flex-1 border-l-2 pl-4 transition-colors
+             ${isInView ? 'border-red-600/30' : 'border-white/5'}
+             md:border-white/5 md:group-hover:border-red-600/30
+         `}>
             {desc}
          </p>
          
          <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-auto">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-white transition-colors">
-               <span className="w-1.5 h-1.5 bg-gray-600 rounded-full group-hover:bg-red-500 group-hover:animate-ping"></span>
+            <div className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-colors
+                ${isInView ? 'text-white' : 'text-gray-500'}
+                md:text-gray-500 md:group-hover:text-white
+            `}>
+               <span className={`w-1.5 h-1.5 rounded-full
+                   ${isInView ? 'bg-red-500 animate-ping' : 'bg-gray-600'}
+                   md:bg-gray-600 md:group-hover:bg-red-500 md:group-hover:animate-ping
+               `}></span>
                Online
             </div>
-            <ArrowUpRight size={16} className="text-gray-600 group-hover:text-red-500 transition-colors transform group-hover:rotate-45 duration-300" />
+            <ArrowUpRight size={16} className={`transition-colors transform duration-300
+                ${isInView ? 'text-red-500 rotate-45' : 'text-gray-600'}
+                md:text-gray-600 md:rotate-0 md:group-hover:text-red-500 md:group-hover:rotate-45
+            `} />
          </div>
       </div>
     </div>
@@ -664,7 +705,7 @@ const App = () => {
          </div>
       </section>
 
-      {/* --- SERVICES SECTION (UPDATED) --- */}
+      {/* --- SERVICES SECTION --- */}
       <section id="services" className="py-32 px-6">
          <div className="max-w-7xl mx-auto">
             <RevealOnScroll>
