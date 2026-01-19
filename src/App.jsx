@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity, Send, MapPin, Phone, Check, Star, User } from 'lucide-react';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity, Send, MapPin, Phone, Check, Star, User, Hash, Terminal } from 'lucide-react';
 
 // --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND ---
 const ParticleBackground = () => {
@@ -180,7 +180,7 @@ const HackerText = ({ text, className }) => {
   return <span className={className}>{displayText}</span>;
 };
 
-// --- COMPONENT 4: SPOTLIGHT CARD ---
+// --- COMPONENT 4: SPOTLIGHT CARD (KEPT FOR PRICING) ---
 const SpotlightCard = ({ children, className = "" }) => {
   const divRef = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -213,7 +213,49 @@ const SpotlightCard = ({ children, className = "" }) => {
   );
 };
 
-// --- COMPONENT 5: 3D CAROUSEL ---
+// --- COMPONENT 5: NEW CYBER SERVICE CARD (NEW ATTRACTIVE DESIGN) ---
+const CyberServiceCard = ({ icon: Icon, title, desc, index }) => {
+  return (
+    <div className="group relative h-full bg-neutral-900 border border-white/10 overflow-hidden hover:border-red-600/50 transition-all duration-500 rounded-none md:rounded-tr-[3rem] md:rounded-bl-[3rem]">
+      
+      {/* Background Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_14px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      {/* Red Glow on Hover */}
+      <div className="absolute inset-0 bg-gradient-to-b from-red-900/0 via-red-900/0 to-red-900/0 group-hover:via-red-900/5 group-hover:to-red-900/10 transition-all duration-500"></div>
+      
+      {/* Decorative Corners */}
+      <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-white/10 group-hover:border-red-600 transition-colors duration-500"></div>
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-white/10 group-hover:border-red-600 transition-colors duration-500"></div>
+
+      <div className="relative p-8 z-10 flex flex-col h-full">
+         <div className="flex justify-between items-start mb-8">
+            <div className="w-14 h-14 bg-white/5 border border-white/10 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white group-hover:border-red-500 transition-all duration-500 shadow-lg group-hover:shadow-red-600/20">
+               <Icon size={28} strokeWidth={1.5} />
+            </div>
+            <span className="font-mono text-xs text-gray-700 group-hover:text-red-500/50 transition-colors">SYS_0{index + 1}</span>
+         </div>
+         
+         <h3 className="text-2xl font-bold text-white mb-4 group-hover:translate-x-2 transition-transform duration-300 flex items-center gap-2">
+            {title}
+         </h3>
+         <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1 border-l-2 border-white/5 pl-4 group-hover:border-red-600/30 transition-colors">
+            {desc}
+         </p>
+         
+         <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-auto">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-white transition-colors">
+               <span className="w-1.5 h-1.5 bg-gray-600 rounded-full group-hover:bg-red-500 group-hover:animate-ping"></span>
+               Online
+            </div>
+            <ArrowUpRight size={16} className="text-gray-600 group-hover:text-red-500 transition-colors transform group-hover:rotate-45 duration-300" />
+         </div>
+      </div>
+    </div>
+  );
+};
+
+// --- COMPONENT 6: 3D CAROUSEL ---
 const ThreeDCarousel = () => {
   const [active, setActive] = useState(1);
   const cards = [
@@ -300,7 +342,7 @@ const ThreeDCarousel = () => {
   );
 };
 
-// --- COMPONENT 6: INFINITE SCROLL LOGOS ---
+// --- COMPONENT 7: INFINITE SCROLL LOGOS ---
 function InfiniteLogos() {
     return (
         <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
@@ -325,7 +367,7 @@ function InfiniteLogos() {
     )
 }
 
-// --- COMPONENT 7: FAQ ---
+// --- COMPONENT 8: FAQ ---
 const AccordionItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -341,7 +383,7 @@ const AccordionItem = ({ question, answer }) => {
   );
 };
 
-// --- COMPONENT 8: PROCESS TIMELINE ---
+// --- COMPONENT 9: PROCESS TIMELINE ---
 const ProcessStep = ({ number, title, desc }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" }); 
@@ -367,7 +409,7 @@ const ProcessStep = ({ number, title, desc }) => {
   );
 };
 
-// --- COMPONENT 9: TEAM MEMBER CARD ---
+// --- COMPONENT 10: TEAM MEMBER CARD ---
 const TeamMember = ({ name, role, img }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
@@ -404,7 +446,7 @@ const TeamMember = ({ name, role, img }) => {
   )
 }
 
-// --- COMPONENT 10: HERO GRAPHIC ---
+// --- COMPONENT 11: HERO GRAPHIC ---
 const HeroGraphic = () => {
   return (
     <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] hidden md:flex items-center justify-center pointer-events-none select-none">
@@ -422,7 +464,7 @@ const HeroGraphic = () => {
   );
 };
 
-// --- COMPONENT 11: ANIMATED COUNTER ---
+// --- COMPONENT 12: ANIMATED COUNTER ---
 const Counter = ({ from, to, label }) => {
   const nodeRef = useRef();
   const isInView = useInView(nodeRef, { once: false, margin: "-100px" });
@@ -451,7 +493,7 @@ const Counter = ({ from, to, label }) => {
   );
 };
 
-// --- COMPONENT 12: PRICING CARD (NEW) ---
+// --- COMPONENT 13: PRICING CARD ---
 const PricingCard = ({ title, price, features, recommended = false }) => {
   return (
     <SpotlightCard className={`p-8 flex flex-col h-full ${recommended ? 'border-red-600 shadow-[0_0_30px_rgba(220,38,38,0.2)]' : ''}`}>
@@ -622,32 +664,26 @@ const App = () => {
          </div>
       </section>
 
-      {/* --- SERVICES --- */}
+      {/* --- SERVICES SECTION (UPDATED) --- */}
       <section id="services" className="py-32 px-6">
          <div className="max-w-7xl mx-auto">
             <RevealOnScroll>
                 <div className="mb-20">
-                    <span className="text-red-500 font-mono text-sm tracking-widest uppercase">/// What We Do</span>
+                    <span className="text-red-500 font-mono text-sm tracking-widest uppercase">/// System Capabilities</span>
                     <h2 className="text-4xl md:text-6xl font-bold mt-4">CORE SERVICES</h2>
                 </div>
             </RevealOnScroll>
             <div className="grid md:grid-cols-3 gap-6">
                {[
-                   { icon: Shield, title: "Cyber Security", desc: "Vulnerability assessment & penetration testing." },
-                   { icon: Cpu, title: "AI Solutions", desc: "Machine learning models & intelligent automation." },
-                   { icon: Globe, title: "Web Systems", desc: "Enterprise scalable web applications." },
-                   { icon: Smartphone, title: "Mobile Apps", desc: "Native iOS & Android development." },
-                   { icon: Database, title: "Cloud Infra", desc: "AWS/Azure architecture & DevOps." },
-                   { icon: Layers, title: "UI/UX Design", desc: "User-centric interface design systems." }
+                   { icon: Shield, title: "Cyber Security", desc: "Military-grade vulnerability assessment, penetration testing, and real-time threat monitoring." },
+                   { icon: Cpu, title: "AI Solutions", desc: "Custom machine learning models, intelligent automation bots, and predictive analytics integration." },
+                   { icon: Globe, title: "Web Systems", desc: "High-performance, scalable web applications built with React, Next.js and secure cloud architecture." },
+                   { icon: Smartphone, title: "Mobile Apps", desc: "Native and cross-platform mobile experiences for iOS & Android with offline capabilities." },
+                   { icon: Database, title: "Cloud Infra", desc: "AWS/Azure serverless architecture design, DevOps automation, and database optimization." },
+                   { icon: Terminal, title: "Custom Software", desc: "Tailor-made software solutions for complex business logic and enterprise resource planning." }
                ].map((service, idx) => (
                    <RevealOnScroll key={idx} delay={idx * 0.1}>
-                       <SpotlightCard className="p-8 h-full min-h-[250px] group" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-                           <div className="relative z-10 flex flex-col h-full">
-                               <service.icon size={40} className="text-red-600 mb-6 group-hover:scale-110 transition-transform duration-300" />
-                               <h3 className="text-2xl font-bold mb-4 text-white">{service.title}</h3>
-                               <p className="text-gray-400">{service.desc}</p>
-                           </div>
-                       </SpotlightCard>
+                       <CyberServiceCard index={idx} icon={service.icon} title={service.title} desc={service.desc} />
                    </RevealOnScroll>
                ))}
             </div>
@@ -685,7 +721,7 @@ const App = () => {
          </div>
       </section>
 
-      {/* --- PRICING SECTION (NEW) --- */}
+      {/* --- PRICING SECTION --- */}
       <section id="pricing" className="py-32 px-6 bg-neutral-900/20">
          <div className="max-w-7xl mx-auto">
             <RevealOnScroll>
@@ -723,7 +759,7 @@ const App = () => {
          </div>
       </section>
 
-      {/* --- TESTIMONIALS SECTION (NEW) --- */}
+      {/* --- TESTIMONIALS SECTION --- */}
       <section id="testimonials" className="py-32 px-6 border-t border-white/5">
          <div className="max-w-7xl mx-auto">
             <RevealOnScroll>
