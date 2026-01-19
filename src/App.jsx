@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail } from 'lucide-react';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, ChevronDown, Cpu, Lock, Zap, Layers, Menu, X, ChevronLeft, ChevronRight, Linkedin, Github, Twitter, Mail, Activity } from 'lucide-react';
 
 // --- COMPONENT 1: ENHANCED PARTICLE BACKGROUND ---
 const ParticleBackground = () => {
@@ -11,7 +11,6 @@ const ParticleBackground = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    let animationFrameId;
     
     const handleResize = () => {
       canvas.width = window.innerWidth;
@@ -93,6 +92,7 @@ const ParticleBackground = () => {
       shootingStars.push(new ShootingStar());
     }
 
+    let animationFrameId;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < particlesArray.length; i++) {
@@ -367,10 +367,9 @@ const ProcessStep = ({ number, title, desc }) => {
   );
 };
 
-// --- COMPONENT 9: TEAM MEMBER CARD (UPDATED: AUTO SCROLL EFFECT ON MOBILE) ---
+// --- COMPONENT 9: TEAM MEMBER CARD ---
 const TeamMember = ({ name, role, img }) => {
   const ref = useRef(null);
-  // Detects if the card is in view (approx middle of screen) for mobile animation
   const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
 
   return (
@@ -380,7 +379,6 @@ const TeamMember = ({ name, role, img }) => {
           <img 
             src={img} 
             alt={name} 
-            // Logic: On Mobile/Scroll (isInView), force color & scale. On Desktop (md), use group-hover.
             className={`w-full h-full object-cover transition-all duration-700 
               ${isInView ? 'grayscale-0 scale-110' : 'grayscale scale-100'} 
               md:grayscale md:scale-100 md:group-hover:grayscale-0 md:group-hover:scale-110`}
@@ -394,7 +392,6 @@ const TeamMember = ({ name, role, img }) => {
           <h3 className="text-2xl font-bold text-white mb-1">{name}</h3>
           <p className="text-red-500 font-mono text-sm tracking-widest uppercase mb-4">{role}</p>
           
-          {/* Socials - Reveal on Scroll (Mobile) or Hover (Desktop) */}
           <div className={`flex gap-4 transition-opacity duration-500 delay-100
                ${isInView ? 'opacity-100' : 'opacity-0'}
                md:opacity-0 md:group-hover:opacity-100`}>
@@ -407,6 +404,37 @@ const TeamMember = ({ name, role, img }) => {
   )
 }
 
+// --- NEW COMPONENT: HERO GRAPHIC (CYBER CORE) ---
+const HeroGraphic = () => {
+  return (
+    <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] hidden md:flex items-center justify-center pointer-events-none select-none">
+      {/* Outer Rotating Ring */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="absolute w-full h-full rounded-full border border-red-600/20 border-dashed"
+      />
+      {/* Inner Rotating Ring (Opposite Direction) */}
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute w-[80%] h-[80%] rounded-full border-2 border-orange-600/30 border-dotted"
+      />
+      {/* Central Glowing Core & Shield */}
+      <div className="absolute w-32 h-32 bg-gradient-to-br from-red-600 to-orange-600 rounded-full blur-[60px] opacity-40 animate-pulse" />
+      <div className="relative z-10 flex flex-col items-center justify-center">
+        <Shield size={100} className="text-red-500 drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
+        <Activity size={30} className="text-orange-400 mt-4 animate-pulse" />
+      </div>
+      {/* Orbiting Data Points */}
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute w-[60%] h-[60%] rounded-full">
+         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-red-500 rounded-full blur-[2px]"></div>
+      </motion.div>
+    </div>
+  );
+};
+
+
 // --- MAIN APP ---
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -415,7 +443,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 2500); // 2.5s Loading
+    setTimeout(() => setLoading(false), 2500); 
     const mouseMove = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", mouseMove);
     return () => window.removeEventListener("mousemove", mouseMove);
@@ -448,6 +476,10 @@ const App = () => {
       <div className="fixed top-0 left-0 w-6 h-6 bg-red-600 rounded-full pointer-events-none z-[100] hidden md:block mix-blend-screen blur-[2px]" style={{ left: mousePosition.x - 12, top: mousePosition.y - 12, transform: isHovering ? 'scale(3)' : 'scale(1)', transition: 'transform 0.1s' }} />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-orange-600 origin-left z-50" style={{ scaleX }} />
       <motion.div className="fixed top-0 left-0 bottom-0 w-1 bg-red-600 origin-top z-50 shadow-[0_0_15px_rgba(220,38,38,0.8)] hidden md:block" style={{ scaleY }} />
+
+      {/* Cyber Grid Floor (Subtle) */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#220000_1px,transparent_1px),linear-gradient(to_bottom,#220000_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000_70%,transparent_100%)] opacity-20"></div>
+
 
       {/* --- NAVBAR --- */}
       <nav className="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/60 backdrop-blur-lg border-b border-white/10 transition-all duration-300">
@@ -503,23 +535,40 @@ const App = () => {
         )}
       </AnimatePresence>
 
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION (UPDATED) --- */}
       <section className="min-h-screen flex flex-col justify-center px-6 pt-20 relative">
-        <div className="max-w-7xl mx-auto w-full z-10">
-          <RevealOnScroll>
-              <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                  <span className="text-xs font-mono text-gray-300">SYSTEM ONLINE</span>
-              </div>
-              <h1 className="text-5xl md:text-9xl font-black tracking-tighter leading-none text-white mb-6">
-                <HackerText text="DIGITAL" className="block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
-                  <HackerText text="EVOLUTION." className="" />
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mt-6 border-l-4 border-red-600 pl-6">
-                 <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
-              </p>
+        {/* Floating UI Elements */}
+        <div className="absolute top-1/4 right-1/4 text-red-500/30 font-mono text-xs animate-pulse hidden md:block pointer-events-none select-none">/// NETWORK_STATUS: STABLE</div>
+        <div className="absolute bottom-1/4 left-1/3 text-red-500/30 font-mono text-xs animate-pulse delay-700 hidden md:block pointer-events-none select-none">[+] ENCRYPTED_CONN: ACTIVE</div>
+
+        <div className="max-w-7xl mx-auto w-full z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+          {/* Left Content */}
+          <div className="flex-1">
+            <RevealOnScroll>
+                <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span className="text-xs font-mono text-gray-300">SYSTEM ONLINE</span>
+                </div>
+                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none text-white mb-6">
+                  <HackerText text="DIGITAL" className="block" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
+                    <HackerText text="EVOLUTION." className="" />
+                  </span>
+                </h1>
+                <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mt-8 border-l-4 border-red-600 pl-6">
+                  <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
+                </p>
+                
+                {/* CTA Button */}
+                <button className="mt-10 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all flex items-center gap-2 group">
+                  EXPLORE PLATFORM <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
+            </RevealOnScroll>
+          </div>
+
+          {/* Right Graphic (New) */}
+          <RevealOnScroll delay={0.2}>
+             <HeroGraphic />
           </RevealOnScroll>
         </div>
       </section>
