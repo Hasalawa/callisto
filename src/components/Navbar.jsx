@@ -11,7 +11,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, setIsHovering }) => {
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
                 >
-                    <img src="/logo.png" alt="Logo" className="h-10 w-auto rounded-full" />
+                    <img src="/logo.png" alt="Logo" className="h-12 w-auto rounded-full" />
                     <div className="hidden md:block">
                         <h1 className="font-bold text-lg tracking-tight leading-none text-white mb-1">CALLISTO</h1>
                         <p className="text-[9px] text-gray-400 tracking-[0.2em]">SOFTWARE SOLUTION (PVT) LTD</p>
