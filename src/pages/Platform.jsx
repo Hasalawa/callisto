@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowLeft, Activity, Wifi, HardDrive, AlertTriangle, Shield, Globe, Cpu, Zap, Crosshair, ArrowUp, ArrowDown, Database, Clock } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
+import Footer from '../components/Footer'; // Footer එක Import කළා
 
-// --- HELPER: REVEAL ON SCROLL COMPONENT (Same as Home) ---
+// --- HELPER: REVEAL ON SCROLL COMPONENT ---
 const RevealOnScroll = ({ children, delay = 0 }) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, margin: "-10%" }); // Re-animates on scroll
+    const isInView = useInView(ref, { once: false, margin: "-10%" });
 
     return (
         <motion.div
@@ -361,10 +362,10 @@ const LiveThreatLog = () => {
 // --- MAIN PLATFORM PAGE ---
 const PlatformPage = ({ onBack }) => {
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [loading, setLoading] = useState(true); // Added Loading State
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Preloader Effect for Platform Page
+        // Simulate Preloader
         setTimeout(() => setLoading(false), 2000);
 
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -374,7 +375,7 @@ const PlatformPage = ({ onBack }) => {
     const hours = currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const seconds = currentTime.toLocaleTimeString('en-US', { second: '2-digit' });
 
-    // --- RENDER PRELOADER IF LOADING ---
+    // --- PRELOADER (SAME AS HOME) ---
     if (loading) {
         return (
             <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
@@ -446,7 +447,7 @@ const PlatformPage = ({ onBack }) => {
 
                 {/* ROW 1: TRAFFIC GRAPH  + NETWORK STATUS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    {/* Main Traffic Monitor with Scroll Reveal */}
+                    {/* Main Traffic Monitor */}
                     <div className="col-span-1 md:col-span-2">
                         <RevealOnScroll>
                             <div className="bg-neutral-900/40 border border-white/10 rounded-xl p-6 backdrop-blur-md relative overflow-hidden group h-full">
@@ -465,7 +466,7 @@ const PlatformPage = ({ onBack }) => {
                         </RevealOnScroll>
                     </div>
 
-                    {/* Network Status with Scroll Reveal */}
+                    {/* Network Status */}
                     <div className="col-span-1">
                         <RevealOnScroll delay={0.1}>
                             <NetworkStatus />
@@ -498,6 +499,9 @@ const PlatformPage = ({ onBack }) => {
                 </RevealOnScroll>
 
             </div>
+
+            {/* --- ADDED FOOTER HERE --- */}
+            <Footer />
 
             <style jsx>{`
                 @keyframes scan { 0% { top: -10%; opacity: 0; } 50% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
