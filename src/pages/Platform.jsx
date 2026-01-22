@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Activity, Wifi, HardDrive, AlertTriangle, Shield, Check, Globe, Cpu, Zap, Crosshair, ArrowUp, ArrowDown, Database, Clock } from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+import { ArrowLeft, Activity, Wifi, HardDrive, AlertTriangle, Shield, Globe, Cpu, Zap, Crosshair, ArrowUp, ArrowDown, Database, Clock } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
 
-// --- HELPER: GENERATE RANDOM DATA ---
-const generateData = (length = 40) => Array.from({ length }, () => Math.floor(Math.random() * 40) + 20);
+// --- HELPER: REVEAL ON SCROLL COMPONENT (Same as Home) ---
+const RevealOnScroll = ({ children, delay = 0 }) => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: false, margin: "-10%" }); // Re-animates on scroll
+
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
+            transition={{ duration: 0.6, delay: delay, ease: "easeOut" }}
+        >
+            {children}
+        </motion.div>
+    );
+};
 
 // --- COMPONENT 1: SMOOTH SCROLLING CANVAS GRAPH ---
 const LiveTrafficGraph = () => {
@@ -18,7 +32,6 @@ const LiveTrafficGraph = () => {
 
         const pointCount = 60;
         const speed = 1.5;
-
         const data = Array.from({ length: pointCount + 2 }, () => Math.random() * 50 + 20);
 
         let offset = 0;
@@ -161,11 +174,7 @@ const NetworkStatus = () => {
                         <span className="text-green-400 font-mono text-lg">{stats.latency}ms</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-green-500"
-                            animate={{ width: `${(stats.latency / 50) * 100}%` }}
-                            transition={{ duration: 0.5 }}
-                        />
+                        <motion.div className="h-full bg-green-500" animate={{ width: `${(stats.latency / 50) * 100}%` }} transition={{ duration: 0.5 }} />
                     </div>
                 </div>
 
@@ -175,11 +184,7 @@ const NetworkStatus = () => {
                         <span className="text-white font-mono text-lg">{stats.upload} MB/s</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-red-500"
-                            animate={{ width: `${(stats.upload / 1000) * 100}%` }}
-                            transition={{ duration: 0.5 }}
-                        />
+                        <motion.div className="h-full bg-red-500" animate={{ width: `${(stats.upload / 1000) * 100}%` }} transition={{ duration: 0.5 }} />
                     </div>
                 </div>
 
@@ -189,11 +194,7 @@ const NetworkStatus = () => {
                         <span className="text-white font-mono text-lg">{stats.download} GB/s</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-blue-500"
-                            animate={{ width: `${(stats.download / 2) * 100}%` }}
-                            transition={{ duration: 0.5 }}
-                        />
+                        <motion.div className="h-full bg-blue-500" animate={{ width: `${(stats.download / 2) * 100}%` }} transition={{ duration: 0.5 }} />
                     </div>
                 </div>
             </div>
@@ -360,14 +361,32 @@ const LiveThreatLog = () => {
 // --- MAIN PLATFORM PAGE ---
 const PlatformPage = ({ onBack }) => {
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [loading, setLoading] = useState(true); // Added Loading State
 
     useEffect(() => {
+        // Preloader Effect for Platform Page
+        setTimeout(() => setLoading(false), 2000);
+
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
 
     const hours = currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const seconds = currentTime.toLocaleTimeString('en-US', { second: '2-digit' });
+
+    // --- RENDER PRELOADER IF LOADING ---
+    if (loading) {
+        return (
+            <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
+                <div className="relative flex items-center justify-center mb-6">
+                    <div className="absolute w-28 h-28 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin"></div>
+                    <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse rounded-full" />
+                </div>
+                <h2 className="text-white font-black text-2xl tracking-widest uppercase">CALLISTO</h2>
+                <p className="text-red-500 font-mono text-xs mt-2 tracking-[0.2em] animate-pulse">SYSTEM INITIALIZING...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-[#050505] text-white pt-24 px-6 relative overflow-hidden font-sans">
@@ -402,9 +421,8 @@ const PlatformPage = ({ onBack }) => {
                 </div>
             </div>
 
-            {/* --- 2. HEADER SECTION (LOGO + TITLE) - BELOW TOP BAR --- */}
+            {/* --- 2. HEADER SECTION (LOGO + TITLE) --- */}
             <div className="max-w-7xl mx-auto mb-12 flex items-center gap-6 relative z-10">
-                {/* ANIMATED ROUNDED LOGO */}
                 <div className="relative flex items-center justify-center w-20 h-20 group flex-shrink-0">
                     <div className="absolute inset-0 rounded-full border border-red-600/30 border-t-red-500 animate-[spin_4s_linear_infinite]"></div>
                     <div className="absolute inset-2 rounded-full border border-red-600/20 border-b-red-500 animate-[spin_3s_linear_infinite_reverse]"></div>
@@ -413,7 +431,6 @@ const PlatformPage = ({ onBack }) => {
                     </div>
                 </div>
 
-                {/* TEXT */}
                 <div>
                     <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter font-sans drop-shadow-[0_2px_4px_rgba(220,38,38,0.5)]">
                         COMMAND CENTER
@@ -429,54 +446,56 @@ const PlatformPage = ({ onBack }) => {
 
                 {/* ROW 1: TRAFFIC GRAPH  + NETWORK STATUS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    {/* Main Traffic Monitor */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="col-span-1 md:col-span-2 bg-neutral-900/40 border border-white/10 rounded-xl p-6 backdrop-blur-md relative overflow-hidden group"
-                    >
-                        <div className="absolute top-0 right-0 p-2 opacity-50"><Zap className="text-red-600" size={20} /></div>
-                        <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-2">
-                            <span className="w-1.5 h-4 bg-red-600"></span>
-                            <h3 className="text-lg font-bold text-gray-200">GLOBAL NETWORK TRAFFIC</h3>
-                        </div>
-                        <LiveTrafficGraph />
-                        <div className="mt-4 grid grid-cols-3 gap-4 text-center">
-                            <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">PACKETS</p><p className="text-lg font-mono font-bold text-white">4.2M/s</p></div>
-                            <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">BANDWIDTH</p><p className="text-lg font-mono font-bold text-white">12 GB</p></div>
-                            <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">LOAD</p><p className="text-lg font-mono font-bold text-red-500">84%</p></div>
-                        </div>
-                    </motion.div>
+                    {/* Main Traffic Monitor with Scroll Reveal */}
+                    <div className="col-span-1 md:col-span-2">
+                        <RevealOnScroll>
+                            <div className="bg-neutral-900/40 border border-white/10 rounded-xl p-6 backdrop-blur-md relative overflow-hidden group h-full">
+                                <div className="absolute top-0 right-0 p-2 opacity-50"><Zap className="text-red-600" size={20} /></div>
+                                <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-2">
+                                    <span className="w-1.5 h-4 bg-red-600"></span>
+                                    <h3 className="text-lg font-bold text-gray-200">GLOBAL NETWORK TRAFFIC</h3>
+                                </div>
+                                <LiveTrafficGraph />
+                                <div className="mt-4 grid grid-cols-3 gap-4 text-center">
+                                    <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">PACKETS</p><p className="text-lg font-mono font-bold text-white">4.2M/s</p></div>
+                                    <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">BANDWIDTH</p><p className="text-lg font-mono font-bold text-white">12 GB</p></div>
+                                    <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">LOAD</p><p className="text-lg font-mono font-bold text-red-500">84%</p></div>
+                                </div>
+                            </div>
+                        </RevealOnScroll>
+                    </div>
 
-                    {/* Network Status */}
-                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="col-span-1">
-                        <NetworkStatus />
-                    </motion.div>
+                    {/* Network Status with Scroll Reveal */}
+                    <div className="col-span-1">
+                        <RevealOnScroll delay={0.1}>
+                            <NetworkStatus />
+                        </RevealOnScroll>
+                    </div>
                 </div>
 
                 {/* --- ROW 2 --- */}
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                    <RevealOnScroll delay={0.2}>
                         <CyberRadar />
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                    </RevealOnScroll>
+                    <RevealOnScroll delay={0.3}>
                         <ServerLoadGauge />
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                    </RevealOnScroll>
+                    <RevealOnScroll delay={0.4}>
                         <MemoryMatrix />
-                    </motion.div>
+                    </RevealOnScroll>
                 </div>
 
                 {/* --- ROW 3 --- */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}
-                    className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden hover:border-red-600/30 transition-colors"
-                >
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-bold flex items-center gap-2"><Shield className="text-red-500" /> Firewall Logs</h3>
-                        <button className="text-xs text-red-500 border border-red-500/30 px-3 py-1 rounded hover:bg-red-500/10 transition-colors">EXPORT LOGS</button>
+                <RevealOnScroll delay={0.5}>
+                    <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden hover:border-red-600/30 transition-colors">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold flex items-center gap-2"><Shield className="text-red-500" /> Firewall Logs</h3>
+                            <button className="text-xs text-red-500 border border-red-500/30 px-3 py-1 rounded hover:bg-red-500/10 transition-colors">EXPORT LOGS</button>
+                        </div>
+                        <LiveThreatLog />
                     </div>
-                    <LiveThreatLog />
-                </motion.div>
+                </RevealOnScroll>
 
             </div>
 
