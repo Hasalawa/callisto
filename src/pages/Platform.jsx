@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { ArrowLeft, Activity, Wifi, HardDrive, AlertTriangle, Shield, Globe, Cpu, Zap, Crosshair, ArrowUp, ArrowDown, Database, Clock } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
-import Footer from '../components/Footer'; // Footer එක Import කළා
+import Footer from '../components/Footer';
 
 // --- HELPER: REVEAL ON SCROLL COMPONENT ---
-const RevealOnScroll = ({ children, delay = 0 }) => {
+const RevealOnScroll = ({ children, delay = 0, className = "" }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, margin: "-10%" });
 
@@ -15,6 +15,7 @@ const RevealOnScroll = ({ children, delay = 0 }) => {
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
             transition={{ duration: 0.6, delay: delay, ease: "easeOut" }}
+            className={className} // Added className prop to handle height
         >
             {children}
         </motion.div>
@@ -168,14 +169,19 @@ const NetworkStatus = () => {
             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Wifi className="text-red-500" /> Network Status
             </h3>
-            <div className="space-y-6 flex-1 flex flex-col justify-center">
+            {/* Added flex-1 and justify-around to space elements evenly */}
+            <div className="flex-1 flex flex-col justify-around py-2">
                 <div className="group">
                     <div className="flex justify-between items-center pb-1">
                         <span className="text-gray-400 text-sm">Latency</span>
                         <span className="text-green-400 font-mono text-lg">{stats.latency}ms</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div className="h-full bg-green-500" animate={{ width: `${(stats.latency / 50) * 100}%` }} transition={{ duration: 0.5 }} />
+                        <motion.div
+                            className="h-full bg-green-500"
+                            animate={{ width: `${(stats.latency / 50) * 100}%` }}
+                            transition={{ duration: 0.5 }}
+                        />
                     </div>
                 </div>
 
@@ -185,7 +191,11 @@ const NetworkStatus = () => {
                         <span className="text-white font-mono text-lg">{stats.upload} MB/s</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div className="h-full bg-red-500" animate={{ width: `${(stats.upload / 1000) * 100}%` }} transition={{ duration: 0.5 }} />
+                        <motion.div
+                            className="h-full bg-red-500"
+                            animate={{ width: `${(stats.upload / 1000) * 100}%` }}
+                            transition={{ duration: 0.5 }}
+                        />
                     </div>
                 </div>
 
@@ -195,7 +205,11 @@ const NetworkStatus = () => {
                         <span className="text-white font-mono text-lg">{stats.download} GB/s</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div className="h-full bg-blue-500" animate={{ width: `${(stats.download / 2) * 100}%` }} transition={{ duration: 0.5 }} />
+                        <motion.div
+                            className="h-full bg-blue-500"
+                            animate={{ width: `${(stats.download / 2) * 100}%` }}
+                            transition={{ duration: 0.5 }}
+                        />
                     </div>
                 </div>
             </div>
@@ -365,9 +379,7 @@ const PlatformPage = ({ onBack }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate Preloader
         setTimeout(() => setLoading(false), 2000);
-
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
@@ -375,7 +387,6 @@ const PlatformPage = ({ onBack }) => {
     const hours = currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const seconds = currentTime.toLocaleTimeString('en-US', { second: '2-digit' });
 
-    // --- PRELOADER (SAME AS HOME) ---
     if (loading) {
         return (
             <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
@@ -396,7 +407,7 @@ const PlatformPage = ({ onBack }) => {
             <div className="fixed inset-0 pointer-events-none z-[50] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] opacity-20"></div>
             <div className="fixed top-0 left-0 w-full h-1 bg-white/5 blur-md animate-[scan_6s_linear_infinite] pointer-events-none z-[50]"></div>
 
-            {/* --- 1. TOP BAR (EXIT + TOOLS + CLOCK) --- */}
+            {/* --- 1. TOP BAR --- */}
             <div className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10 border-b border-white/10 pb-6">
                 <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group font-mono text-sm">
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> &lt; DISCONNECT_SESSION /&gt;
@@ -407,7 +418,6 @@ const PlatformPage = ({ onBack }) => {
                         SECURE_CHANNEL: ENCRYPTED
                     </div>
 
-                    {/* GREEN CYBER CLOCK */}
                     <div className="flex items-center gap-3 px-4 py-2 bg-green-950/20 border border-green-500/30 rounded-lg shadow-[0_0_10px_rgba(16,185,129,0.1)] backdrop-blur-sm">
                         <Clock size={16} className="text-green-500" />
                         <div className="font-mono font-bold text-green-400 text-sm tracking-widest flex items-center gap-1">
@@ -422,7 +432,7 @@ const PlatformPage = ({ onBack }) => {
                 </div>
             </div>
 
-            {/* --- 2. HEADER SECTION (LOGO + TITLE) --- */}
+            {/* --- 2. HEADER SECTION --- */}
             <div className="max-w-7xl mx-auto mb-12 flex items-center gap-6 relative z-10">
                 <div className="relative flex items-center justify-center w-20 h-20 group flex-shrink-0">
                     <div className="absolute inset-0 rounded-full border border-red-600/30 border-t-red-500 animate-[spin_4s_linear_infinite]"></div>
@@ -445,18 +455,20 @@ const PlatformPage = ({ onBack }) => {
 
             <div className="max-w-7xl mx-auto relative z-10 pb-20">
 
-                {/* ROW 1: TRAFFIC GRAPH  + NETWORK STATUS */}
+                {/* --- ROW 1: TRAFFIC GRAPH + NETWORK STATUS (Equal Height Fix) --- */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     {/* Main Traffic Monitor */}
                     <div className="col-span-1 md:col-span-2">
-                        <RevealOnScroll>
-                            <div className="bg-neutral-900/40 border border-white/10 rounded-xl p-6 backdrop-blur-md relative overflow-hidden group h-full">
+                        <RevealOnScroll className="h-full">
+                            <div className="bg-neutral-900/40 border border-white/10 rounded-xl p-6 backdrop-blur-md relative overflow-hidden group h-full flex flex-col justify-between">
                                 <div className="absolute top-0 right-0 p-2 opacity-50"><Zap className="text-red-600" size={20} /></div>
-                                <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-2">
-                                    <span className="w-1.5 h-4 bg-red-600"></span>
-                                    <h3 className="text-lg font-bold text-gray-200">GLOBAL NETWORK TRAFFIC</h3>
+                                <div>
+                                    <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-2">
+                                        <span className="w-1.5 h-4 bg-red-600"></span>
+                                        <h3 className="text-lg font-bold text-gray-200">GLOBAL NETWORK TRAFFIC</h3>
+                                    </div>
+                                    <LiveTrafficGraph />
                                 </div>
-                                <LiveTrafficGraph />
                                 <div className="mt-4 grid grid-cols-3 gap-4 text-center">
                                     <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">PACKETS</p><p className="text-lg font-mono font-bold text-white">4.2M/s</p></div>
                                     <div className="bg-black/40 p-2 rounded border border-white/5"><p className="text-[10px] text-gray-500">BANDWIDTH</p><p className="text-lg font-mono font-bold text-white">12 GB</p></div>
@@ -466,9 +478,9 @@ const PlatformPage = ({ onBack }) => {
                         </RevealOnScroll>
                     </div>
 
-                    {/* Network Status */}
+                    {/* Network Status (Fixed Height to match Graph) */}
                     <div className="col-span-1">
-                        <RevealOnScroll delay={0.1}>
+                        <RevealOnScroll delay={0.1} className="h-full">
                             <NetworkStatus />
                         </RevealOnScroll>
                     </div>
@@ -476,15 +488,9 @@ const PlatformPage = ({ onBack }) => {
 
                 {/* --- ROW 2 --- */}
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
-                    <RevealOnScroll delay={0.2}>
-                        <CyberRadar />
-                    </RevealOnScroll>
-                    <RevealOnScroll delay={0.3}>
-                        <ServerLoadGauge />
-                    </RevealOnScroll>
-                    <RevealOnScroll delay={0.4}>
-                        <MemoryMatrix />
-                    </RevealOnScroll>
+                    <RevealOnScroll delay={0.2}><CyberRadar /></RevealOnScroll>
+                    <RevealOnScroll delay={0.3}><ServerLoadGauge /></RevealOnScroll>
+                    <RevealOnScroll delay={0.4}><MemoryMatrix /></RevealOnScroll>
                 </div>
 
                 {/* --- ROW 3 --- */}
@@ -500,7 +506,6 @@ const PlatformPage = ({ onBack }) => {
 
             </div>
 
-            {/* --- ADDED FOOTER HERE --- */}
             <Footer />
 
             <style jsx>{`
