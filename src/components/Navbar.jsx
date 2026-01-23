@@ -52,8 +52,6 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, setIsHovering }) => {
                                 onClick={() => setIsMenuOpen(false)}
                                 className="text-2xl text-white hover:text-red-600 transition-colors tracking-tighter"
                             >
-                                {/* font-black */}
-
                                 {item}
                             </a>
                         ))}
