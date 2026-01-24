@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, Cpu, Lock, Zap, Layers, Linkedin, Github, Twitter, Mail, Send, MapPin, Phone, Check, Star, User, Terminal } from 'lucide-react';
+import { ArrowUpRight, Shield, Server, Globe, Database, Smartphone, Code, Cpu, Lock, Zap, Layers, Linkedin, Github, Twitter, Mail, Send, MapPin, Phone, Check, Star, User, Terminal, Wifi } from 'lucide-react';
 import { ParticleBackground, RevealOnScroll, HackerText, HeroGraphic, AccordionItem } from '../components/Shared';
 // Import all specific components from the new file
 import { CyberServiceCard, ThreeDCarousel, InfiniteLogos, ProcessStep, TeamMember, Counter, PricingCard } from '../components/PageComponents';
@@ -82,12 +82,36 @@ const Home = ({ navigateTo }) => {
                     </RevealOnScroll>
                     <div className="grid md:grid-cols-3 gap-6">
                         {[
-                            { icon: Shield, title: "Cyber Security", desc: "Military-grade vulnerability assessment, penetration testing, and real-time threat monitoring." },
-                            { icon: Cpu, title: "AI Solutions", desc: "Custom machine learning models, intelligent automation bots, and predictive analytics integration." },
-                            { icon: Globe, title: "Web Systems", desc: "High-performance, scalable web applications built with React, Next.js and secure cloud architecture." },
-                            { icon: Smartphone, title: "Mobile Apps", desc: "Native and cross-platform mobile experiences for iOS & Android with offline capabilities." },
-                            { icon: Database, title: "Cloud Infra", desc: "AWS/Azure serverless architecture design, DevOps automation, and database optimization." },
-                            { icon: Terminal, title: "Custom Software", desc: "Tailor-made software solutions for complex business logic and enterprise resource planning." }
+                            {
+                                icon: Globe,
+                                title: "Enterprise Web Systems",
+                                desc: "High-performance, scalable web platforms built with React.js, Laravel, and Java architectures for complex business needs."
+                            },
+                            {
+                                icon: Smartphone,
+                                title: "Next-Gen Mobile Apps",
+                                desc: "Seamless cross-platform and native Android experiences using React Native to ensure dominance in the mobile market."
+                            },
+                            {
+                                icon: Terminal,
+                                title: "Custom Software & Desktop",
+                                desc: "Robust Java-based desktop applications and tailored software solutions engineered to automate your unique business logic."
+                            },
+                            {
+                                icon: Wifi,
+                                title: "Industrial IoT Solutions",
+                                desc: "Bridging hardware and cloud ecosystems for real-time remote monitoring, smart control, and data-driven connectivity."
+                            },
+                            {
+                                icon: Cpu,
+                                title: "AI & Machine Learning",
+                                desc: "Integrating intelligent algorithms to transform raw data into predictive insights and automated decision-making systems."
+                            },
+                            {
+                                icon: Shield,
+                                title: "Cyber Security",
+                                desc: "Military-grade vulnerability assessment, penetration testing, and digital fortification to protect your sensitive data."
+                            }
                         ].map((service, idx) => (
                             <RevealOnScroll key={idx} delay={idx * 0.1}>
                                 <CyberServiceCard index={idx} icon={service.icon} title={service.title} desc={service.desc} />
