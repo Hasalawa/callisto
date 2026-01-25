@@ -144,7 +144,7 @@ const Home = ({ navigateTo }) => {
             <section id="projects" className="py-32 px-6 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <RevealOnScroll>
-                        <h2 className="text-5xl font-black mb-16 text-center">FEATURED WORK</h2>
+                        <h2 className="text-5xl font-black mb-2 text-center">FEATURED WORK</h2>
                     </RevealOnScroll>
                     <RevealOnScroll delay={0.2}>
                         <ThreeDCarousel />
