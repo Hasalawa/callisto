@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Check, Code, ChevronLeft, ChevronRight, Globe, Layers, Server, Database, Smartphone, Cpu, Lock, Zap, Linkedin, Shield, Twitter, Mail } from 'lucide-react';
 import { SpotlightCard } from './Shared'; // Shared එකෙන් SpotlightCard එක ගන්නවා
 
@@ -114,7 +114,6 @@ export const ThreeDCarousel = () => {
       category: "AgriTech",
       icon: Cpu,
       tech: ["Python", "IoT", "Azure"],
-      // UPDATED IMAGE LINK
       img: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
       desc: "AI-driven crop monitoring system with autonomous irrigation control."
     }
@@ -128,7 +127,7 @@ export const ThreeDCarousel = () => {
     if (isPaused) return;
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % cards.length);
-    }, 2800);
+    }, 4000); // 4 Seconds
     return () => clearInterval(interval);
   }, [isPaused, cards.length]);
 
@@ -139,13 +138,12 @@ export const ThreeDCarousel = () => {
 
     const isActive = dist === 0;
 
-    // Spacing: Adjusted slightly to fit 3 cards comfortably
+    // Spacing
     const xOffset = dist * 160;
 
     const scale = isActive ? 1.05 : 1 - Math.abs(dist) * 0.15;
 
-    // UPDATED OPACITY LOGIC:
-    // 1. Decrease fade rate (0.2) so 3rd card is visible (0.4 opacity)
+    // Opacity logic to show 3 cards deep
     const opacity = isActive ? 1 : 1 - Math.abs(dist) * 0.2;
 
     const zIndex = 10 - Math.abs(dist);
@@ -154,22 +152,29 @@ export const ThreeDCarousel = () => {
     return {
       x: xOffset,
       scale,
-      // VISIBILITY UPDATE: Show up to 3 cards (dist > 3 hides it)
       opacity: Math.abs(dist) > 3 ? 0 : opacity,
       zIndex,
       rotateY,
-      filter: isActive ? 'blur(0px) brightness(1.1)' : 'blur(3px) brightness(0.7)',
+      filter: isActive ? 'blur(0px) brightness(1.1)' : 'blur(4px) brightness(0.6)',
       pointerEvents: isActive ? 'auto' : 'none',
       isActive
     };
   };
 
   return (
-    <div className="relative h-[650px] w-full flex items-center justify-center perspective-1000">
+    <div className="relative h-[650px] w-full flex items-center justify-center perspective-1000 overflow-hidden">
 
-      <div className="absolute w-[200px] h-[200px] bg-red-600/10 blur-[80px] rounded-full pointer-events-none animate-pulse"></div>
+      {/* DYNAMIC BACKGROUND PULSE */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute w-[500px] h-[500px] bg-red-600/20 blur-[120px] rounded-full pointer-events-none"
+      />
 
-      <div className="relative w-full max-w-7xl h-full flex items-center justify-center">
+      <div className="relative w-full max-w-7xl h-full flex items-center justify-center mb-12">
         {cards.map((card, index) => {
           const { isActive, ...styles } = getCardStyles(index);
           const CardIcon = card.icon;
@@ -177,53 +182,66 @@ export const ThreeDCarousel = () => {
           return (
             <motion.div
               key={card.id}
-              animate={styles}
-              // TRANSITION: Fast & Smooth
+              initial={styles}
+              animate={{
+                ...styles,
+                // FLOATING EFFECT
+                y: isActive ? [0, -10, 0] : 0,
+              }}
               transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 30,
-                mass: 0.8
+                // Switching physics (Fast & Smooth)
+                type: "spring", stiffness: 350, damping: 30, mass: 0.8,
+                // Floating loop override
+                y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
               }}
 
-              // Pause logic (Only on Active Card)
               onMouseEnter={() => isActive && setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
 
-              className="absolute w-[300px] md:w-[380px] h-[400px] bg-neutral-900 rounded-3xl overflow-hidden flex flex-col group transition-all duration-500"
+              className="absolute w-[300px] md:w-[380px] h-[400px] bg-neutral-900 rounded-3xl overflow-hidden flex flex-col group border border-white/5"
               style={{
                 transformStyle: 'preserve-3d',
                 boxShadow: isActive
-                  ? `0 0 30px -5px ${themeColor}80, 0 0 10px -2px ${themeColor}`
+                  ? `0 20px 50px -10px ${themeColor}60, 0 0 20px -5px ${themeColor}`
                   : '0 10px 30px -10px black',
-                border: `1px solid ${isActive ? themeColor : 'rgba(255,255,255,0.1)'}`
+                border: `1px solid ${isActive ? themeColor : 'rgba(255,255,255,0.05)'}`
               }}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0 z-0">
-                <img src={card.img} alt={card.title} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+              {/* Background Image: Grayscale when inactive, Color when active */}
+              <div className="absolute inset-0 z-0 overflow-hidden">
+                <img
+                  src={card.img}
+                  alt={card.title}
+                  className={`w-full h-full object-cover opacity-50 transition-all duration-700 group-hover:scale-110 ${isActive ? 'grayscale-0' : 'grayscale'}`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent"></div>
               </div>
 
+              {/* PROGRESS BAR */}
+              {isActive && !isPaused && (
+                <motion.div
+                  className="absolute bottom-0 left-0 h-[3px] bg-red-500 z-50 shadow-[0_0_10px_#dc2626]"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 4, ease: "linear" }}
+                  key={active}
+                />
+              )}
+
               {/* Content */}
-              <div className="relative z-10 p-5 flex flex-col h-full">
+              <div className="relative z-10 p-6 flex flex-col h-full">
 
                 {/* Top Badge Row */}
                 <div className="flex justify-between items-start mb-2">
-
                   {/* ICON BADGE */}
                   <div
-                    className="w-8 h-8 backdrop-blur-md rounded-md flex items-center justify-center z-20 shadow-lg"
-                    style={{
-                      backgroundColor: `${themeColor}60`,
-                      border: `1px solid ${themeColor}`,
-                      boxShadow: `0 0 15px ${themeColor}50`
-                    }}
+                    className="w-10 h-10 backdrop-blur-xl rounded-lg flex items-center justify-center z-20 shadow-lg border border-white/10"
+                    style={{ backgroundColor: `${themeColor}40` }}
                   >
-                    <CardIcon size={16} className="text-white drop-shadow-md" />
+                    <CardIcon size={20} className="text-white drop-shadow-md" />
                   </div>
 
-                  {/* CATEGORY BADGE */}
+                  {/* RESTORED: PREVIOUS CATEGORY BADGE DESIGN & ANIMATION */}
                   <div
                     className="px-3 py-1 rounded-md shadow-lg z-20 backdrop-blur-md"
                     style={{
@@ -232,11 +250,11 @@ export const ThreeDCarousel = () => {
                       boxShadow: `0 0 10px ${themeColor}40`
                     }}
                   >
-                    {/* Animated Text */}
+                    {/* Animated Text: Color Pulse */}
                     <motion.span
                       className="text-[10px] font-mono font-bold uppercase tracking-wider block"
                       animate={isActive ? {
-                        color: ["#dc2626", "#ff9999", "#dc2626"],
+                        color: ["#dc2626", "#ff9999", "#dc2626"], // Red -> Light Red -> Red
                       } : { color: themeColor }}
                       transition={{
                         duration: 2,
@@ -249,40 +267,51 @@ export const ThreeDCarousel = () => {
                   </div>
                 </div>
 
-                {/* Bottom Details */}
-                <div className="mt-auto mb-2">
-                  <h3 className="text-2xl font-black text-white mb-2 leading-tight transition-colors"
-                    style={{ textShadow: isActive ? `0 0 20px ${themeColor}60` : 'none' }}
+                {/* Bottom Details with STAGGERED ENTRANCE ANIMATION */}
+                <div className="mt-auto">
+                  {/* Animate Title */}
+                  <motion.h3
+                    className="text-3xl font-black text-white mb-3 leading-tight"
+                    animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.1, duration: 0.4 }}
                   >
                     {card.title}
-                  </h3>
+                  </motion.h3>
 
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  {/* Animate Tags */}
+                  <motion.div
+                    className="flex flex-wrap gap-2 mb-4"
+                    animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.2, duration: 0.4 }}
+                  >
                     {card.tech.map((tech, i) => (
-                      <span key={i} className="text-[9px] px-2 py-0.5 bg-white/5 border border-white/10 rounded text-gray-300 font-mono">
+                      <span key={i} className="text-[10px] px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-gray-300 font-mono hover:bg-white/10 transition-colors">
                         {tech}
                       </span>
                     ))}
-                  </div>
+                  </motion.div>
 
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4 border-l-2 pl-3 line-clamp-2"
-                    style={{ borderColor: isActive ? themeColor : 'rgba(255,255,255,0.1)' }}
+                  {/* Animate Description */}
+                  <motion.p
+                    className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-2"
+                    animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.3, duration: 0.4 }}
                   >
                     {card.desc}
-                  </p>
+                  </motion.p>
 
-                  {/* ACTION BUTTON */}
-                  <button
-                    className="group/btn relative w-full py-2.5 bg-red-600 text-white text-xs font-bold rounded-lg overflow-hidden shadow-lg shadow-red-600/20 hover:shadow-red-600/50 transition-all duration-300"
+                  {/* Animate Button */}
+                  <motion.button
+                    className="group/btn relative w-full py-3 bg-red-600 text-white text-xs font-bold rounded-xl overflow-hidden shadow-lg shadow-red-600/20 hover:shadow-red-600/50 transition-all duration-300"
+                    animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.4, duration: 0.4 }}
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
-                      VIEW CASE STUDY
-                      <ArrowUpRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                      EXPLORE PROJECT
+                      <ArrowUpRight size={16} className="transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                     </span>
-
-                    {/* Shine Effect Overlay */}
-                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full ease-in-out"></div>
-                  </button>
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full ease-in-out"></div>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
@@ -292,16 +321,15 @@ export const ThreeDCarousel = () => {
 
       {/* Navigation Buttons */}
       <div
-        className="absolute bottom-4 flex gap-6 z-30"
-        // Pause logic when hovering buttons
+        className="absolute bottom-12 flex gap-6 z-30"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        <button onClick={handlePrev} className="p-4 rounded-full bg-neutral-900 border border-white/10 text-white hover:bg-red-600 hover:border-red-600 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all active:scale-95 shadow-2xl">
-          <ChevronLeft size={24} />
+        <button onClick={handlePrev} className="group p-4 rounded-full bg-black/40 border border-white/10 text-white hover:bg-red-600 hover:border-red-500 backdrop-blur-md transition-all active:scale-95 shadow-2xl">
+          <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
         </button>
-        <button onClick={handleNext} className="p-4 rounded-full bg-neutral-900 border border-white/10 text-white hover:bg-red-600 hover:border-red-600 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all active:scale-95 shadow-2xl">
-          <ChevronRight size={24} />
+        <button onClick={handleNext} className="group p-4 rounded-full bg-black/40 border border-white/10 text-white hover:bg-red-600 hover:border-red-500 backdrop-blur-md transition-all active:scale-95 shadow-2xl">
+          <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
         </button>
       </div>
     </div>
