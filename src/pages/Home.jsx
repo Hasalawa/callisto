@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowUpRight, Shield, Globe, Database, Smartphone, Cpu, Send, MapPin, Phone, Mail, Terminal } from 'lucide-react';
+import { ArrowUpRight, Shield, Globe, Database, Smartphone, Cpu, Send, MapPin, Phone, Mail, Terminal, Wifi } from 'lucide-react';
 import { ParticleBackground, RevealOnScroll, HackerText, HeroGraphic, AccordionItem } from '../components/Shared';
 import { CyberServiceCard, ThreeDCarousel, InfiniteLogos, ProcessStep, TeamMember, Counter, PricingCard } from '../components/PageComponents';
 import Navbar from '../components/Navbar';
@@ -20,12 +20,43 @@ const Home = ({ navigateTo }) => {
 
     // Services Data
     const services = [
-        { id: 'web-systems', icon: Globe, title: "Enterprise Web Systems", desc: "High-performance, scalable web platforms built with React.js, Laravel, and Java architectures for complex business needs." },
-        { id: 'mobile-apps', icon: Smartphone, title: "Next-Gen Mobile Apps", desc: "Seamless cross-platform and native Android experiences using React Native to ensure dominance in the mobile market." },
-        { id: 'custom-soft', icon: Terminal, title: "Custom Software", desc: "Robust Java-based desktop applications and tailored software solutions engineered to automate your unique business logic." },
-        { id: 'cloud-infra', icon: Database, title: "Cloud Infra", desc: "AWS/Azure serverless architecture design, DevOps automation, and database optimization." },
-        { id: 'ai-solutions', icon: Cpu, title: "AI & Machine Learning", desc: "Integrating intelligent algorithms to transform raw data into predictive insights and automated decision-making systems." },
-        { id: 'cyber-security', icon: Shield, title: "Cyber Security", desc: "Military-grade vulnerability assessment, penetration testing, and digital fortification to protect your sensitive data." }
+
+        {
+            id: 'web-systems',
+            icon: Globe,
+            title: "Enterprise Web Systems",
+            desc: "High-performance, scalable web platforms built with React.js, Laravel, and Java architectures for complex business needs."
+        },
+        {
+            id: 'mobile-apps',
+            icon: Smartphone,
+            title: "Next-Gen Mobile Apps",
+            desc: "Seamless cross-platform and native Android experiences using React Native to ensure dominance in the mobile market."
+        },
+        {
+            id: 'custom-soft',
+            icon: Terminal,
+            title: "Custom Software & Desktop",
+            desc: "Robust Java-based desktop applications and tailored software solutions engineered to automate your unique business logic."
+        },
+        {
+            id: 'iot-solutions',
+            icon: Wifi,
+            title: "Industrial IoT Solutions",
+            desc: "Bridging hardware and cloud ecosystems for real-time remote monitoring, smart control, and data-driven connectivity."
+        },
+        {
+            id: 'ai-solutions',
+            icon: Cpu,
+            title: "AI & Machine Learning",
+            desc: "Integrating intelligent algorithms to transform raw data into predictive insights and automated decision-making systems."
+        },
+        {
+            id: 'cyber-security',
+            icon: Shield,
+            title: "Cyber Security",
+            desc: "Military-grade vulnerability assessment, penetration testing, and digital fortification to protect your sensitive data."
+        }
     ];
 
     return (
