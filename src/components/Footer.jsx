@@ -18,7 +18,7 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-[#050505] pt-24 pb-10 border-t border-white/5 relative overflow-hidden">
+        <footer className="bg-[#050505] pt-12 pb-10 border-t border-white/5 relative overflow-hidden">
             {/* Background Decorative Elements */}
             <div className="absolute top-0 left-1/4 w-64 h-64 bg-red-600/5 rounded-full blur-[120px] pointer-events-none"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-900/5 rounded-full blur-[150px] pointer-events-none"></div>
@@ -37,7 +37,7 @@ const Footer = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-5"
                 >
                     {/* Column 1: Brand Info */}
                     <motion.div variants={itemVariants} className="space-y-8">
@@ -193,7 +193,7 @@ const Footer = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
+                    className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
                 >
                     <div className="flex items-center gap-6">
                         <p className="text-gray-600 text-[12px] font-mono tracking-wider">

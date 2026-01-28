@@ -87,7 +87,7 @@ const Home = ({ navigateTo }) => {
                             <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mt-8 border-l-4 border-red-600 pl-6">
                                 <strong className="text-white">Callisto Software Solution (Pvt) Ltd</strong> transforms businesses with AI-driven software and military-grade cybersecurity.
                             </p>
-                            <button onClick={() => navigateTo('platform')} className="mt-10 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all flex items-center gap-2 group">
+                            <button onClick={() => navigateTo('platform')} className="mt-20 md:my-20 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all flex items-center gap-2 group">
                                 EXPLORE PLATFORM <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </button>
                         </RevealOnScroll>
@@ -102,7 +102,7 @@ const Home = ({ navigateTo }) => {
             </div>
 
             {/* --- STATS --- */}
-            <section className="py-20 px-6 border-b border-white/5">
+            <section className="pb-8 pt-16 md:py-20 px-6 border-b border-white/5">
                 <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
                     <Counter from={0} to={85} label="Projects" />
                     <Counter from={0} to={12} label="Countries" />
@@ -112,7 +112,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- SERVICES (CLICK FIXED HERE) --- */}
-            <section id="services" className="py-32 px-6">
+            <section id="services" className="py-12 md:py-16 px-6">
                 <div className="max-w-7xl mx-auto">
                     <RevealOnScroll>
                         <div className="mb-20">
@@ -134,7 +134,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- PROCESS --- */}
-            <section id="process" className="py-32 px-6 bg-neutral-900/30">
+            <section id="process" className="py-12 md:py-16 bg-neutral-900/30">
                 <div className="max-w-4xl mx-auto">
                     <RevealOnScroll>
                         <div className="text-center mb-16">
@@ -153,7 +153,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- PROJECTS --- */}
-            <section id="projects" className="py-32 px-6 overflow-hidden">
+            <section id="projects" className="pt-12 md:pt-16 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <RevealOnScroll>
                         <h2 className="text-5xl font-black mb-4 text-center">FEATURED WORK</h2>
@@ -165,7 +165,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- PRICING --- */}
-            <section id="pricing" className="py-32 px-6 bg-neutral-900/20">
+            <section id="pricing" className="py-12 md:py-16 px-6 bg-neutral-900/20">
                 <div className="max-w-7xl mx-auto">
                     <RevealOnScroll>
                         <div className="mb-20 text-center">
@@ -203,7 +203,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- TEAM --- */}
-            <section id="team" className="py-32 px-6 bg-neutral-900/20 border-t border-white/5">
+            <section id="team" className="py-12 md:py-16 px-6 bg-neutral-900/20 border-t border-white/5">
                 <div className="max-w-7xl mx-auto">
                     <RevealOnScroll>
                         <div className="mb-20 text-center">
@@ -228,7 +228,7 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- CONTACT --- */}
-            <section id="contact" className="py-32 px-6 relative overflow-hidden">
+            <section id="contact" className="py-12 md:py-16 px-6 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-red-900/5 -z-10 skew-y-3 transform origin-top-left"></div>
                 <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
                     <RevealOnScroll>
