@@ -412,7 +412,7 @@ export const Counter = ({ from, to, label }) => {
     window.requestAnimationFrame(step);
   }, [from, to, isInView]);
   return (
-    <div className="text-center p-6 bg-neutral-900 border border-white/10 rounded-2xl hover:border-red-600 transition-colors duration-500">
+    <div className="text-center px-10 py-12 bg-neutral-900 border border-white/10 rounded-2xl hover:border-red-600 transition-colors duration-500">
       <div className="text-5xl font-black text-white mb-2 flex justify-center items-baseline"><span ref={nodeRef}>{from}</span><span className="text-red-600">+</span></div>
       <div className="text-gray-400 text-sm uppercase tracking-widest font-mono">{label}</div>
     </div>
