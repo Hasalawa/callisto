@@ -92,7 +92,7 @@ If you prefer to run the project in a containerized environment (no local Node.j
 
 **Kehan Hasalawa** - GitHub: [@Hasalawa](https://github.com/Hasalawa)
 
-**Sahan Dilshan** - GitGub: [@Sahan20030814](https:github.com/Sahan20030814)
+**Sahan Dilshan** - GitGub: [@Sahan20030814](https://github.com/Sahan20030814)
 
 
 ## 📄 License
