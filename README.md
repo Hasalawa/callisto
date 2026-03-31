@@ -48,6 +48,7 @@ A next-generation, highly interactive, and cyber-security-themed corporate websi
 ├── docker-compose.yml          # Multi-container orchestration
 └── package.json                # Project dependencies
 
+```
 ## 💻 Local Installation & Setup
 
 ### Prerequisites
