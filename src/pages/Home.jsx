@@ -128,7 +128,7 @@ const Home = ({ navigateTo }) => {
                         <h2 className="text-5xl font-black mb-4 text-center">FEATURED WORK</h2>
                     </RevealOnScroll>
                     <RevealOnScroll delay={0.2}>
-                        <ThreeDCarousel />
+                        <ThreeDCarousel navigateTo={navigateTo} />
                     </RevealOnScroll>
                 </div>
             </section>
