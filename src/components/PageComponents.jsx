@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Check, Code, ChevronLeft, ChevronRight, Globe, Layers, Server, Database, Smartphone, Cpu, Lock, Zap, Linkedin, Shield, Twitter, Mail } from 'lucide-react';
-import { SpotlightCard } from './Shared'; // Shared එකෙන් SpotlightCard එක ගන්නවා
+import { ArrowUpRight, Check, Code, ChevronLeft, ChevronRight, Gem, Globe, Layers, Landmark, MapPin, Server, Database, MessageSquare, Smartphone, PlayCircle, Cpu, Lock, Zap, Linkedin, Shield, Store, Twitter, Mail, ShoppingCart } from 'lucide-react';
+import { SpotlightCard } from './Shared';
 
 // --- 1. CYBER SERVICE CARD ---
 export const CyberServiceCard = ({ icon: Icon, title, desc, index }) => {
@@ -47,75 +47,75 @@ export const ThreeDCarousel = () => {
   const cards = [
     {
       id: 1,
-      title: "FinTech Core",
-      category: "Banking",
-      icon: Database,
-      tech: ["React", "Node.js", "Blockchain"],
-      img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
-      desc: "Secure banking portal with 256-bit encryption & AI fraud detection."
+      title: "E-BUY",
+      category: "E-Commerce",
+      icon: ShoppingCart,
+      tech: ["PHP", "JavaScript", "MySQL", "Bootstrap"],
+      img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
+      desc: "A responsive e-commerce platform for electronic goods featuring dynamic cart management and secure checkout."
     },
     {
       id: 2,
-      title: "AeroNav AI",
-      category: "Drone Tech",
-      icon: Zap,
-      tech: ["Python", "TensorFlow", "IoT"],
-      img: "https://images.unsplash.com/photo-1506947411487-a56738267384?auto=format&fit=crop&q=80&w=800",
-      desc: "Autonomous navigation system for commercial drones using Computer Vision."
+      title: "ChatMe",
+      category: "Messaging App",
+      icon: MessageSquare,
+      tech: ["React Native", "TypeScript", "Java", "WebSockets", "MySQL"],
+      img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
+      desc: "Cross-platform messaging application featuring real-time seamless communication and instant replies."
     },
     {
       id: 3,
-      title: "MediSync",
-      category: "Healthcare",
-      icon: Code,
-      tech: ["Flutter", "Firebase", "AI"],
-      img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
-      desc: "Hospital management system with AI diagnostics and Cloud Sync."
+      title: "Smart Auto-Bot",
+      category: "IoT & Hardware",
+      icon: Cpu,
+      tech: ["Arduino", "C", "C++", "Java"],
+      img: "https://images.unsplash.com/photo-1561144257-e32e8efc6c4f?auto=format&fit=crop&q=80&w=800",
+      desc: "Obstacle-avoiding smart robotic car with a dedicated Java-based desktop control interface via Bluetooth."
     },
     {
       id: 4,
-      title: "CyberShield",
-      category: "Security",
-      icon: Shield,
-      tech: ["C++", "Rust", "Networking"],
-      img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
-      desc: "Enterprise-grade firewall and threat detection dashboard."
+      title: "AIRNET",
+      category: "Entertainment",
+      icon: PlayCircle,
+      tech: ["Java", "HTML/CSS", "Bootstrap", "JavaScript", "MySQL"],
+      img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800",
+      desc: "A comprehensive Java-based web platform for creators to sell, and users to purchase and stream Movies & TV Shows."
     },
     {
       id: 5,
-      title: "LogiChain",
-      category: "Logistics",
-      icon: Server,
-      tech: ["Angular", "AWS", "IoT"],
-      img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
-      desc: "AI-powered supply chain optimization with real-time fleet tracking."
+      title: "Mega Market POS",
+      category: "Retail System",
+      icon: Store,
+      tech: ["Java", "Java Swing", "MySQL", "JasperReports", "JFreeChart"],
+      img: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=800",
+      desc: "Comprehensive Java desktop POS system for seamless billing, multi-payment processing, and real-time inventory management."
     },
     {
       id: 6,
-      title: "EduSphere",
-      category: "EdTech",
-      icon: Smartphone,
-      tech: ["Vue.js", "WebRTC", "AI"],
-      img: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800",
-      desc: "Interactive LMS with live virtual classrooms and AI tutoring."
+      title: "NexWay",
+      category: "Ride-Hailing App",
+      icon: MapPin,
+      tech: ["Java", "Spring Boot", "Firebase", "Google Maps API"],
+      img: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800",
+      desc: "On-demand Android ride-hailing platform featuring real-time GPS tracking, connecting passengers and drivers seamlessly."
     },
     {
       id: 7,
-      title: "EstateVR",
-      category: "Real Estate",
-      icon: Layers,
-      tech: ["Unity", "React", "VR"],
-      img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800",
-      desc: "Immersive virtual tours for luxury real estate properties."
+      title: "CBC Banking System",
+      category: "Enterprise Banking",
+      icon: Landmark,
+      tech: ["Java", "Java Swing", "MySQL", "JasperReports", "JFreeChart"],
+      img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800",
+      desc: "An end-to-end Java desktop banking solution managing all core branch operations, featuring integrated biometric fingerprint attendance and dynamic reporting."
     },
     {
       id: 8,
-      title: "AgriSense",
-      category: "AgriTech",
-      icon: Cpu,
-      tech: ["Python", "IoT", "Azure"],
-      img: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
-      desc: "AI-driven crop monitoring system with autonomous irrigation control."
+      title: "Pinkie",
+      category: "E-Commerce",
+      icon: Gem,
+      tech: ["Java", "Hibernate", "MySQL", "Bootstrap", "JavaScript"],
+      img: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800",
+      desc: "Elegant Java-based e-commerce web application for purchasing premium jewelry, featuring a seamless shopping experience and secure checkout."
     }
   ];
 
@@ -212,7 +212,7 @@ export const ThreeDCarousel = () => {
                 <img
                   src={card.img}
                   alt={card.title}
-                  className={`w-full h-full object-cover opacity-50 transition-all duration-700 group-hover:scale-110 ${isActive ? 'grayscale-0' : 'grayscale'}`}
+                  className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${isActive ? 'grayscale-0' : 'grayscale'}`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent"></div>
               </div>
