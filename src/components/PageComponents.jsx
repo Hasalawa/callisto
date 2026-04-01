@@ -37,7 +37,7 @@ export const CyberServiceCard = ({ icon: Icon, title, desc, index }) => {
 };
 
 // --- 2. 3D CAROUSEL (RESIZED & COMPACT VERSION) ---
-export const ThreeDCarousel = () => {
+export const ThreeDCarousel = ({ navigateTo }) => {
   const [active, setActive] = useState(2);
   const [isPaused, setIsPaused] = useState(false); // Controls Auto-play
 
@@ -47,6 +47,7 @@ export const ThreeDCarousel = () => {
   const cards = [
     {
       id: 1,
+      project_id: "e-buy",
       title: "E-BUY",
       category: "E-Commerce",
       icon: ShoppingCart,
@@ -56,6 +57,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 2,
+      project_id: "chatme",
       title: "ChatMe",
       category: "Messaging App",
       icon: MessageSquare,
@@ -65,6 +67,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 3,
+      project_id: "smart-auto-bot",
       title: "Smart Auto-Bot",
       category: "IoT & Hardware",
       icon: Cpu,
@@ -74,6 +77,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 4,
+      project_id: "airnet",
       title: "AIRNET",
       category: "Entertainment",
       icon: PlayCircle,
@@ -83,6 +87,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 5,
+      project_id: "mega-market-pos",
       title: "Mega Market POS",
       category: "Retail System",
       icon: Store,
@@ -92,6 +97,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 6,
+      project_id: "nexway",
       title: "NexWay",
       category: "Ride-Hailing App",
       icon: MapPin,
@@ -101,6 +107,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 7,
+      project_id: "cbc-banking-system",
       title: "CBC Banking System",
       category: "Enterprise Banking",
       icon: Landmark,
@@ -110,6 +117,7 @@ export const ThreeDCarousel = () => {
     },
     {
       id: 8,
+      project_id: "pinkie",
       title: "Pinkie",
       category: "E-Commerce",
       icon: Gem,
@@ -301,7 +309,7 @@ export const ThreeDCarousel = () => {
                   </motion.p>
 
                   {/* Animate Button */}
-                  <motion.button
+                  <motion.button onClick={() => navigateTo(`project-${card.project_id}`)}
                     className="group/btn relative w-full py-3 bg-red-600 text-white text-xs font-bold rounded-xl overflow-hidden shadow-lg shadow-red-600/20 hover:shadow-red-600/50 transition-all duration-300"
                     animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     transition={{ delay: 0.4, duration: 0.4 }}
