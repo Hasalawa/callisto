@@ -8,17 +8,17 @@ import Footer from '../components/Footer';
 const HolographicGridOverlay = () => (
     <>
         <div className="fixed inset-0 pointer-events-none z-[0] opacity-30 mix-blend-screen"
-             style={{
-                 backgroundImage: `
+            style={{
+                backgroundImage: `
                     linear-gradient(to right, rgba(220, 38, 38, 0.1) 1px, transparent 1px),
                     linear-gradient(to bottom, rgba(220, 38, 38, 0.1) 1px, transparent 1px)
                  `,
-                 backgroundSize: '50px 50px',
-                 maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
-                 WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
-             }}
+                backgroundSize: '50px 50px',
+                maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+            }}
         >
-            <motion.div 
+            <motion.div
                 className="absolute inset-0 bg-gradient-to-tr from-transparent via-red-500/10 to-transparent"
                 animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
                 transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
@@ -45,19 +45,20 @@ const ImageCarousel = ({ images, accentColor }) => {
 
     return (
         <div className="relative rounded-3xl overflow-hidden border border-red-500/20 shadow-[0_0_40px_rgba(220,38,38,0.15)] group h-[400px] md:h-[520px] bg-[#050505] backdrop-blur-xl">
-            
+
             <div className={`absolute inset-0 bg-gradient-to-tr ${accentColor} mix-blend-overlay opacity-20 z-10 pointer-events-none transition-opacity duration-700 group-hover:opacity-30`}></div>
             <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-white/5 to-transparent opacity-50"></div>
 
-            <AnimatePresence mode="wait">
+            {/* REMOVED mode="wait" so images cross-fade smoothly without showing black background */}
+            <AnimatePresence>
                 <motion.img
                     key={currentIndex}
                     src={images[currentIndex]}
                     alt={`Project screenshot ${currentIndex + 1}`}
                     initial={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    exit={{ opacity: 0, filter: "blur(4px)" }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
                     className="absolute inset-0 w-full h-full object-cover z-0"
                 />
             </AnimatePresence>
@@ -269,18 +270,18 @@ const ProjectDetail = ({ projectId, onBack }) => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white pt-12 px-6 relative font-sans overflow-hidden selection:bg-red-600 selection:text-white">
-            
+        <div className="min-h-screen bg-[#050505] text-white pt-4 px-6 relative font-sans overflow-hidden selection:bg-red-600 selection:text-white">
+
             {/* Background Layers */}
             <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-red-900/15 rounded-full blur-[150px] pointer-events-none"></div>
             <div className="absolute bottom-[10%] right-[-10%] w-[50%] h-[50%] bg-orange-900/10 rounded-full blur-[150px] pointer-events-none"></div>
             <HolographicGridOverlay />
-            
+
             <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-orange-600 to-red-600 z-[100] origin-left shadow-[0_0_15px_rgba(220,38,38,0.8)]" style={{ scaleX }} />
             <ParticleBackground />
 
             <div className="max-w-7xl mx-auto mb-24 relative z-20 mt-10">
-                
+
                 {/* Header Row */}
                 <div className="flex justify-between items-center mb-12">
                     <motion.button
@@ -293,8 +294,8 @@ const ProjectDetail = ({ projectId, onBack }) => {
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform relative z-10 text-red-500 group-hover:text-white" />
                         <span className="relative z-10 tracking-widest font-bold">RETURN</span>
                     </motion.button>
-                    
-                    <motion.div 
+
+                    <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="relative group overflow-hidden rounded-lg"
@@ -311,7 +312,7 @@ const ProjectDetail = ({ projectId, onBack }) => {
 
                 {/* Hero Section */}
                 <div className="grid lg:grid-cols-12 gap-16 items-center mb-24">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -325,7 +326,7 @@ const ProjectDetail = ({ projectId, onBack }) => {
                                 {project.category}
                             </div>
                         </div>
-                        
+
                         <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-500">
                             {(() => {
                                 let globalIndex = 0;
@@ -334,8 +335,8 @@ const ProjectDetail = ({ projectId, onBack }) => {
                                         {word.split('').map((char, charIndex) => {
                                             const delayIndex = globalIndex++;
                                             return (
-                                                <motion.span 
-                                                    key={charIndex} 
+                                                <motion.span
+                                                    key={charIndex}
                                                     initial={{ opacity: 0, y: 20 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     transition={{ delay: delayIndex * 0.05 + 0.3 }}
@@ -356,22 +357,22 @@ const ProjectDetail = ({ projectId, onBack }) => {
                                 {project.overview}
                             </p>
                         </div>
-                        
+
                         <div className="pt-2">
                             <span className="text-[10px] font-mono text-red-500/80 uppercase tracking-widest block mb-4 flex items-center gap-2">
-                                <Layers size={14}/> Stack Configuration
+                                <Layers size={14} /> Stack Configuration
                             </span>
                             <div className="flex flex-wrap gap-2.5">
                                 {project.tech.map((t, i) => (
                                     <span key={i} className="px-4 py-2 bg-white/5 border border-white/10 hover:border-red-500/60 hover:bg-red-900/20 hover:shadow-[0_0_15px_rgba(220,38,38,0.2)] transition-all duration-300 rounded-lg text-xs font-mono text-gray-300 flex items-center gap-2 cursor-default backdrop-blur-sm group/tech">
-                                        <Code size={14} className="text-gray-500 group-hover/tech:text-red-500 transition-colors"/> {t}
+                                        <Code size={14} className="text-gray-500 group-hover/tech:text-red-500 transition-colors" /> {t}
                                     </span>
                                 ))}
                             </div>
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.95, rotateY: 10 }}
                         animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
@@ -381,62 +382,88 @@ const ProjectDetail = ({ projectId, onBack }) => {
                     </motion.div>
                 </div>
 
-                {/* Neon Glow Info Cards (Icon & Text on Same Row) */}
-                <div className="grid md:grid-cols-3 gap-6 mb-24 relative">
-                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-red-600/30 to-transparent -z-10"></div>
-                    
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="relative bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
-                        
-                        <div className="relative z-10 flex items-center gap-5">
-                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
-                                <Globe size={24} className="text-gray-400 group-hover:text-red-400 transition-colors"/>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Client Identity</span>
-                                <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.client}</p>
-                            </div>
-                        </div>
-                    </motion.div>
-                    
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="relative bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                {/* INFO CARDS WITH VISIBLE GLOBAL THICK RED GLOW SWEEP */}
+                <div className="relative mb-24 overflow-hidden py-10 px-2 -mx-2">
 
-                        <div className="relative z-10 flex items-center gap-5">
-                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
-                                <Monitor size={24} className="text-gray-400 group-hover:text-red-400 transition-colors"/>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Dev Timeline</span>
-                                <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.duration}</p>
-                            </div>
-                        </div>
-                    </motion.div>
-                    
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="relative bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
-                         <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    {/* The connecting horizontal line behind the cards */}
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-600/20 to-transparent -translate-y-1/2 z-0 pointer-events-none"></div>
 
-                        <div className="relative z-10 flex items-center gap-5">
-                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
-                                <Shield size={24} className="text-gray-400 group-hover:text-red-400 transition-colors"/>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Primary Role</span>
-                                <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.role}</p>
-                            </div>
-                        </div>
+                    {/* THE GLOBAL CONTINUOUS REFINED GLOW SWEEP - DEEP RED, NO WHITE */}
+                    <motion.div
+                        initial={{ left: '0%' }}
+                        animate={{ left: '100%' }}
+                        transition={{ duration: 6, ease: "linear", repeat: Infinity }}
+                        className="absolute top-0 bottom-0 w-[150px] -skew-x-[15deg] z-[50] pointer-events-none flex justify-center items-center"
+                    >
+                        {/* More intense PURE RED glow to be visible over the dark cards */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-600/90 to-transparent blur-[20px]"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/60 to-transparent blur-[8px]"></div>
                     </motion.div>
+
+                    {/* The Cards Grid */}
+                    <div className="grid md:grid-cols-3 gap-6 relative z-10">
+                        {/* Card 1: Client Identity */}
+                        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="relative flex flex-col justify-center h-full w-full bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none z-[2]"></div>
+                            {/* Interactive Border Glow */}
+                            <div className="absolute inset-0 border-[2px] border-transparent group-hover:border-red-500/30 rounded-[2rem] transition-all duration-500 z-[3] pointer-events-none"></div>
+
+                            <div className="relative z-10 flex flex-row items-center justify-start gap-5 w-full h-full">
+                                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
+                                    <Globe size={24} className="text-gray-400 group-hover:text-red-400 transition-colors" />
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Client Identity</span>
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.client}</p>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Card 2: Dev Timeline */}
+                        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="relative flex flex-col justify-center h-full w-full bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none z-[2]"></div>
+                            {/* Interactive Border Glow */}
+                            <div className="absolute inset-0 border-[2px] border-transparent group-hover:border-red-500/30 rounded-[2rem] transition-all duration-500 z-[3] pointer-events-none"></div>
+
+                            <div className="relative z-10 flex flex-row items-center justify-start gap-5 w-full h-full">
+                                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
+                                    <Monitor size={24} className="text-gray-400 group-hover:text-red-400 transition-colors" />
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Dev Timeline</span>
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.duration}</p>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Card 3: Primary Role */}
+                        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="relative flex flex-col justify-center h-full w-full bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(220,38,38,0.25)] hover:border-red-500/50 hover:-translate-y-2 group overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/10 group-hover:to-transparent transition-colors duration-500 pointer-events-none z-[2]"></div>
+                            {/* Interactive Border Glow */}
+                            <div className="absolute inset-0 border-[2px] border-transparent group-hover:border-red-500/30 rounded-[2rem] transition-all duration-500 z-[3] pointer-events-none"></div>
+
+                            <div className="relative z-10 flex flex-row items-center justify-start gap-5 w-full h-full">
+                                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 group-hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all">
+                                    <Shield size={24} className="text-gray-400 group-hover:text-red-400 transition-colors" />
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-gray-500 font-mono text-[10px] tracking-widest uppercase group-hover:text-red-300 transition-colors block mb-1">Primary Role</span>
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-wide">{project.role}</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
 
                 {/* Key Features Section */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     className="bg-black/60 border border-white/10 rounded-[2.5rem] p-8 md:p-14 relative overflow-hidden backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] group/section"
                 >
                     <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[150px] pointer-events-none group-hover/section:bg-red-600/20 transition-colors duration-1000"></div>
-                    
+
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12 relative z-10 border-b border-white/10 pb-8">
                         <div className="flex items-center gap-5">
                             <div className="h-14 w-2 bg-gradient-to-b from-red-500 to-red-800 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.6)]"></div>
@@ -448,7 +475,7 @@ const ProjectDetail = ({ projectId, onBack }) => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="grid sm:grid-cols-2 gap-6 relative z-10">
                         {project.features.map((feature, idx) => (
                             <div key={idx} className="flex items-start gap-5 p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-red-500/60 hover:bg-gradient-to-r hover:from-red-900/20 hover:to-transparent transition-all duration-300 group shadow-lg hover:shadow-[0_10px_30px_rgba(220,38,38,0.15)] hover:scale-[1.02] cursor-default">
@@ -461,12 +488,12 @@ const ProjectDetail = ({ projectId, onBack }) => {
                     </div>
 
                     <div className="mt-20 flex justify-center relative z-10">
-                       <button className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-full overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] transition-all transform hover:-translate-y-1 ring-1 ring-red-500/50">
+                        <button className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-full overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] transition-all transform hover:-translate-y-1 ring-1 ring-red-500/50">
                             <span className="relative z-10 flex items-center gap-3">
                                 INITIATE SIMILAR BUILD <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={20} />
                             </span>
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full ease-in-out"></div>
-                       </button>
+                        </button>
                     </div>
                 </motion.div>
 
