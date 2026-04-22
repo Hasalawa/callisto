@@ -441,3 +441,30 @@ export const PricingCard = ({ title, price, features, recommended = false }) => 
     </SpotlightCard>
   )
 }
+
+// --- LOADING SCREEN COMPONENT ---
+export const LoadingScreen = ({
+  title = "CALLISTO",
+  subtitle = "SYSTEM INITIALIZING..."
+}) => {
+  return (
+    <div className="fixed inset-0 bg-black z-[999] flex items-center justify-center flex-col text-center">
+      <div className="relative flex items-center justify-center mb-6 w-28 h-28 group flex-shrink-0">
+        <div className="absolute inset-0 rounded-full border-[3px] border-red-600/30 border-t-red-500 animate-[spin_4s_linear_infinite]"></div>
+
+        <div className="absolute inset-2 rounded-full border-[3px] border-red-600/20 border-b-red-500 animate-[spin_3s_linear_infinite_reverse]"></div>
+
+        <div className="relative w-16 h-16 bg-black rounded-full border border-red-500/50 shadow-[0_0_15px_rgba(220,38,38,0.5)] overflow-hidden flex items-center justify-center">
+          <img src="/logo.png" alt="Callisto Logo" className="w-full h-full object-cover opacity-90 animate-pulse" />
+        </div>
+      </div>
+
+      <h2 className="text-white font-black text-2xl tracking-widest uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+        {title}
+      </h2>
+      <p className="text-red-500 font-mono text-xs mt-3 tracking-[0.2em] animate-pulse bg-red-900/20 px-4 py-1.5 rounded-full border border-red-500/30">
+        {subtitle}
+      </p>
+    </div>
+  );
+};

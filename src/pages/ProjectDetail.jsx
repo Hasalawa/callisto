@@ -3,6 +3,7 @@ import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Check, Code, Globe, Monitor, Layers, Cpu, ChevronLeft, ChevronRight, PlayCircle, MapPin, Landmark, Store, Gem, MessageSquare, ShoppingCart, Terminal, Shield } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
 import Footer from '../components/Footer';
+import { LoadingScreen } from '../components/PageComponents';
 
 // --- UTILITY: HOLOGRAPHIC GRID & CRT OVERLAY ---
 const HolographicGridOverlay = () => (
@@ -255,18 +256,7 @@ const ProjectDetail = ({ projectId, onBack }) => {
     const ProjectIcon = project.icon;
 
     if (loading) {
-        return (
-            <div className="fixed inset-0 bg-[#050505] z-[999] flex items-center justify-center flex-col text-center">
-                <HolographicGridOverlay />
-                <div className="relative flex items-center justify-center mb-6">
-                    <div className="absolute w-32 h-32 border-[3px] border-red-600/20 border-t-red-600 rounded-full animate-spin shadow-[0_0_30px_rgba(220,38,38,0.5)]"></div>
-                    <div className="absolute w-24 h-24 border-[3px] border-red-600/10 border-b-red-500 rounded-full animate-spin reverse"></div>
-                    <img src="/logo.png" alt="Loading" className="w-16 h-auto animate-pulse rounded-full drop-shadow-[0_0_20px_rgba(220,38,38,0.9)]" />
-                </div>
-                <h2 className="text-white font-black text-2xl tracking-[0.3em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">DECRYPTING_FILE</h2>
-                <p className="text-red-500 font-mono text-xs mt-3 tracking-[0.2em] animate-pulse bg-red-900/20 px-4 py-1 rounded-full border border-red-500/30">ACCESSING ARCHIVE: {projectId?.toUpperCase()}</p>
-            </div>
-        );
+        return <LoadingScreen title="CALLISTO" subtitle="PROJECT INITIALIZING..." />;
     }
 
     return (
