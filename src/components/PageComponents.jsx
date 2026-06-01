@@ -127,7 +127,7 @@ export const ThreeDCarousel = () => {
     if (isPaused) return;
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % cards.length);
-    }, 4000); // 4 Seconds
+    }, 3900); // 3.9 Seconds
     return () => clearInterval(interval);
   }, [isPaused, cards.length]);
 
