@@ -5,3 +5,12 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Swiper Pagination Customization */
+.swiper-pagination-bullet {
+    background-color: #525252 !important;
+    opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+    background-color: #ef4444 !important; /* Tailwind's red-500 color */
+}

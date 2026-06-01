@@ -4,6 +4,12 @@ import { ParticleBackground, RevealOnScroll, HackerText, HeroGraphic, AccordionI
 import { CyberServiceCard, ThreeDCarousel, InfiniteLogos, ProcessStep, TeamMember, Counter, PricingCard } from '../components/PageComponents';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import TeamMemberCard from '../components/TeamMemberCard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
+import { Pagination, Autoplay } from 'swiper/modules';
 
 const Home = ({ navigateTo }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -202,28 +208,124 @@ const Home = ({ navigateTo }) => {
                 </div>
             </section>
 
-            {/* --- TEAM --- */}
-            <section id="team" className="py-12 md:py-16 px-6 bg-neutral-900/20 border-t border-white/5">
-                <div className="max-w-7xl mx-auto">
+            <section
+                id="team"
+                className="py-20 md:py-28 px-6 bg-neutral-950 border-t border-white/5 relative overflow-hidden"
+                // අලුතින් එකතු කළ කොටස: Section එකට Ref එකක් දෙනවා, ඒකෙන් තමයි මේක පේනවාද නැද්ද කියලා බලන්නේ
+                ref={(el) => {
+                    if (el) {
+                        const observer = new IntersectionObserver(
+                            ([entry]) => {
+                                // Window එකේ (window object) swiper එක save කරගන්නවා
+                                if (window.teamSwiper) {
+                                    if (entry.isIntersecting) {
+                                        window.teamSwiper.autoplay.start(); // Section එක දැක්කම Start කරනවා
+                                    } else {
+                                        window.teamSwiper.autoplay.stop(); // Section එක පේන්නේ නැත්නම් නතර කරනවා
+                                    }
+                                }
+                            },
+                            { threshold: 0.3 } // Section එකෙන් 30% ක් පෙනුනම තමයි වැඩ කරන්න පටන් ගන්නේ
+                        );
+                        observer.observe(el);
+                    }
+                }}
+            >
+                <div className="max-w-7xl mx-auto relative z-10">
                     <RevealOnScroll>
                         <div className="mb-20 text-center">
                             <span className="text-red-500 font-mono text-sm tracking-widest uppercase">/// The Squad</span>
-                            <h2 className="text-4xl md:text-5xl font-black mt-4">MEET THE MINDS</h2>
+                            <h2 className="text-4xl md:text-5xl font-black mt-4 text-white">MEET THE MINDS</h2>
                             <p className="text-gray-400 mt-4 max-w-2xl mx-auto">The elite engineers and strategists behind Callisto's digital dominance.</p>
                         </div>
                     </RevealOnScroll>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                    {/* Swiper එක මෙතනින් පටන් ගන්නවා */}
+                    <Swiper
+                        // අලුතින් එකතු කළ කොටස: Swiper එක load වුණ ගමන් ඒක window එකට save කරගන්නවා පාලනය කරන්න ලේසි වෙන්න
+                        onSwiper={(swiper) => {
+                            window.teamSwiper = swiper;
+                            swiper.autoplay.stop(); // මුලින්ම load වෙද්දී ඉබේම දුවන එක නතර කරලා තියනවා
+                        }}
+                        modules={[Pagination, Autoplay]}
+                        spaceBetween={32}
+                        slidesPerView={1}
+                        pagination={{ clickable: true, dynamicBullets: true }}
+                        autoplay={{
+                            delay: 4000,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true
+                        }}
+                        breakpoints={{
+                            640: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                            1280: { slidesPerView: 4 },
+                        }}
+                        className="w-full pb-16 cursor-grab active:cursor-grabbing"
+                    >
                         {[
-                            { name: "Kehan Hasalawa", role: "Founder / CEO", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" },
-                            { name: "Sarah Jenkins", role: "CTO", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" },
-                            { name: "David Ross", role: "Lead Architect", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800" },
-                            { name: "Emily Chen", role: "Security Analyst", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=800" }
+                            {
+                                name: "Kehan Hasalawa",
+                                role: "Founder / CEO",
+                                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    github: "https://github.com/",
+                                    linkedin: "https://linkedin.com/",
+                                    twitter: "https://twitter.com/"
+                                }
+                            },
+                            {
+                                name: "Tharindra Dasuni",
+                                role: "Co-Founder",
+                                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    linkedin: "https://linkedin.com/"
+                                }
+                            },
+                            {
+                                name: "Sahan  Dilshan",
+                                role: "CEO",
+                                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    github: "https://github.com/",
+                                    twitter: "https://twitter.com/"
+                                }
+                            },
+                            {
+                                name: "Thushara Jayanga",
+                                role: "CTO",
+                                img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    github: "https://github.com/",
+                                    twitter: "https://twitter.com/"
+                                }
+                            },
+                            {
+                                name: "Prasanna Lakshan",
+                                role: "Software Engineer",
+                                img: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    github: "https://github.com/",
+                                    twitter: "https://twitter.com/"
+                                }
+                            },
+                            {
+                                name: "Krishan Chirantha",
+                                role: "Software Engineer",
+                                img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=800",
+                                socials: {
+                                    github: "https://github.com/",
+                                    twitter: "https://twitter.com/"
+                                }
+                            }
                         ].map((member, idx) => (
-                            <RevealOnScroll key={idx} delay={idx * 0.1}>
-                                <TeamMember {...member} />
-                            </RevealOnScroll>
+                            <SwiperSlide key={idx} className="pb-8">
+                                <RevealOnScroll delay={idx * 0.1}>
+                                    <TeamMemberCard {...member} />
+                                </RevealOnScroll>
+                            </SwiperSlide>
                         ))}
-                    </div>
+                    </Swiper>
                 </div>
             </section>
 
