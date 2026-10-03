@@ -166,6 +166,24 @@ const Home = ({ navigateTo }) => {
         }
     };
 
+    // --- Pricing Plan Alert States ---
+    const [showPlanAlert, setShowPlanAlert] = useState(false);
+    const [selectedPlanName, setSelectedPlanName] = useState('');
+
+    const handlePlanSelection = (planName) => {
+        setSelectedPlanName(planName);
+        setShowPlanAlert(true); // Alert එක පෙන්වීම
+
+        // තත්පර 2.5 කට පසුව Contact Section එකට Auto Scroll වීම
+        setTimeout(() => {
+            setShowPlanAlert(false);
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 2500);
+    };
+
     return (
         <div className="bg-[#050505] text-white font-sans selection:bg-red-600 selection:text-white cursor-none overflow-x-hidden relative">
             <ParticleBackground />
@@ -272,39 +290,131 @@ const Home = ({ navigateTo }) => {
             </section>
 
             {/* --- PRICING --- */}
-            <section id="pricing" className="py-12 md:py-16 px-6 bg-neutral-900/20">
-                <div className="max-w-7xl mx-auto">
+            <section id="pricing" className="py-24 md:py-32 px-6 bg-[#050505] relative z-10 overflow-hidden">
+
+                {/* Background ambient glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+                {/* --- PLAN SELECTION ALERT --- */}
+                <AnimatePresence>
+                    {showPlanAlert && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20, x: "-50%" }}
+                            animate={{ opacity: 1, y: 0, x: "-50%" }}
+                            exit={{ opacity: 0, y: -20, x: "-50%" }}
+                            className="fixed top-24 left-1/2 z-[100] bg-[#0a0a0a]/95 backdrop-blur-xl border border-red-500/30 px-6 py-5 rounded-2xl shadow-[0_0_40px_rgba(220,38,38,0.3)] flex items-center gap-5 w-[90%] max-w-md"
+                        >
+                            <div className="w-12 h-12 bg-red-900/20 rounded-full flex items-center justify-center border border-red-500/30 animate-pulse shrink-0">
+                                <Send className="text-red-500" size={24} />
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold text-sm md:text-base tracking-wide">
+                                    Great choice: {selectedPlanName} Plan!
+                                </h4>
+                                <p className="text-gray-400 text-xs font-mono mt-1">
+                                    Please tell us about your project below.<br />Redirecting to contact form...
+                                </p>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <div className="max-w-7xl mx-auto relative z-10">
                     <RevealOnScroll>
                         <div className="mb-20 text-center">
-                            <span className="text-red-500 font-mono text-sm tracking-widest uppercase">/// Investment</span>
-                            <h2 className="text-4xl md:text-5xl font-black mt-4">PRICING PLANS</h2>
-                            <p className="text-gray-400 mt-4">Transparent pricing for world-class engineering.</p>
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+                                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
+                                <span className="text-red-500 font-mono text-xs tracking-widest uppercase">/// Strategic Investment</span>
+                            </div>
+                            <h2 className="text-5xl md:text-7xl font-black mt-4 text-white uppercase tracking-tighter">
+                                PROJECT <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">PRICING</span>
+                            </h2>
+                            <p className="text-gray-400 mt-6 text-lg max-w-2xl mx-auto leading-relaxed">
+                                Transparent pricing architectures engineered for scale. Choose the operational tier that aligns with your mission objectives.
+                            </p>
                         </div>
                     </RevealOnScroll>
 
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid lg:grid-cols-3 gap-8 items-center">
+
+                        {/* --- STARTUP PLAN --- */}
                         <RevealOnScroll delay={0.1}>
-                            <PricingCard
-                                title="Startup"
-                                price="1,500"
-                                features={["Single Page Application", "Basic SEO Setup", "1 Month Support", "Mobile Responsive"]}
-                            />
+                            <div className="bg-[#0a0a0a]/60 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-10 transition-all duration-500 hover:border-red-500/40 hover:shadow-[0_10px_40px_rgba(220,38,38,0.15)] group hover:-translate-y-2 relative overflow-hidden h-full flex flex-col">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:via-red-500/50 transition-all duration-500"></div>
+                                <h3 className="text-xl font-bold text-white mb-2">Startup</h3>
+                                <div className="flex items-baseline gap-1 mb-6">
+                                    <span className="text-gray-500 font-mono">$</span>
+                                    <span className="text-5xl font-black text-white tracking-tighter">1,500</span>
+                                </div>
+                                <p className="text-sm text-gray-400 mb-8 pb-8 border-b border-white/10">Perfect for deploying foundational digital assets and establishing market presence.</p>
+                                <ul className="space-y-5 mb-10 flex-grow">
+                                    {["Single Page Application", "Basic SEO Setup", "1 Month Technical Support", "Mobile Responsive Design"].map((feature, idx) => (
+                                        <li key={idx} className="flex items-center text-sm text-gray-300">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500/80 mr-4 shadow-[0_0_8px_rgba(220,38,38,0.8)]"></span>
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button onClick={() => handlePlanSelection('Startup')} className="w-full py-4 rounded-xl border border-white/10 text-white font-bold text-sm tracking-wide hover:bg-white/5 transition-all">
+                                    INITIALIZE PLAN
+                                </button>
+                            </div>
                         </RevealOnScroll>
+
+                        {/* --- BUSINESS PLAN (RECOMMENDED) --- */}
                         <RevealOnScroll delay={0.2}>
-                            <PricingCard
-                                title="Business"
-                                price="3,500"
-                                recommended={true}
-                                features={["Multi-page Web App", "CMS Integration", "Advanced Security", "3 Months Support", "API Integration"]}
-                            />
+                            <div className="bg-gradient-to-b from-[#1a0505] to-[#0a0a0a] backdrop-blur-2xl border border-red-500/50 rounded-[2rem] p-10 transition-all duration-500 shadow-[0_0_30px_rgba(220,38,38,0.1)] group hover:-translate-y-4 hover:shadow-[0_20px_50px_rgba(220,38,38,0.25)] relative overflow-hidden h-full flex flex-col lg:scale-105 z-10">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+
+                                {/* --- UPDATED RECOMMENDED BADGE --- */}
+                                <div className="absolute top-5 right-5 bg-gradient-to-r from-red-600 to-red-500 border border-red-400/80 px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.8)] z-20">
+                                    <span className="text-[10px] sm:text-xs font-black text-white tracking-widest uppercase drop-shadow-md">Recommended</span>
+                                </div>
+
+                                <h3 className="text-xl font-bold text-white mb-2 mt-2">Business</h3>
+                                <div className="flex items-baseline gap-1 mb-6">
+                                    <span className="text-gray-500 font-mono">$</span>
+                                    <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 tracking-tighter">3,500</span>
+                                </div>
+                                <p className="text-sm text-gray-400 mb-8 pb-8 border-b border-red-500/20">Advanced architectures for scaling operations with robust security protocols.</p>
+                                <ul className="space-y-5 mb-10 flex-grow">
+                                    {["Multi-page Web App / Portal", "Custom CMS Integration", "Advanced Data Security", "3 Months Priority Support", "Third-party API Integration"].map((feature, idx) => (
+                                        <li key={idx} className="flex items-center text-sm text-white font-medium">
+                                            <span className="w-2 h-2 rounded-full bg-red-500 mr-4 shadow-[0_0_12px_rgba(220,38,38,1)]"></span>
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button onClick={() => handlePlanSelection('Business')} className="w-full py-4 rounded-xl bg-gradient-to-r from-red-600 to-red-800 text-white font-black text-sm tracking-widest shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] transition-all overflow-hidden relative group/btn">
+                                    <span className="relative z-10">DEPLOY NOW</span>
+                                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full ease-in-out"></div>
+                                </button>
+                            </div>
                         </RevealOnScroll>
+
+                        {/* --- ENTERPRISE PLAN --- */}
                         <RevealOnScroll delay={0.3}>
-                            <PricingCard
-                                title="Enterprise"
-                                price="Custom"
-                                features={["Full SaaS Platform", "AI & ML Integration", "Cloud Architecture", "24/7 Dedicated Support", "Audited Security"]}
-                            />
+                            <div className="bg-[#0a0a0a]/60 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-10 transition-all duration-500 hover:border-red-500/40 hover:shadow-[0_10px_40px_rgba(220,38,38,0.15)] group hover:-translate-y-2 relative overflow-hidden h-full flex flex-col">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:via-red-500/50 transition-all duration-500"></div>
+                                <h3 className="text-xl font-bold text-white mb-2">Enterprise</h3>
+                                <div className="flex items-baseline gap-1 mb-6">
+                                    <span className="text-5xl font-black text-white tracking-tighter">Custom</span>
+                                </div>
+                                <p className="text-sm text-gray-400 mb-8 pb-8 border-b border-white/10">Military-grade digital infrastructures engineered for massive scale and complexity.</p>
+                                <ul className="space-y-5 mb-10 flex-grow">
+                                    {["Full Custom SaaS Platform", "AI & Machine Learning Engine", "Complex Cloud Architecture", "24/7 Dedicated Engineering Team", "Pen-tested Security Audits"].map((feature, idx) => (
+                                        <li key={idx} className="flex items-center text-sm text-gray-300">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500/80 mr-4 shadow-[0_0_8px_rgba(220,38,38,0.8)]"></span>
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button onClick={() => handlePlanSelection('Enterprise')} className="w-full py-4 rounded-xl border border-white/10 text-white font-bold text-sm tracking-wide hover:bg-white/5 transition-all">
+                                    REQUEST BRIEFING
+                                </button>
+                            </div>
                         </RevealOnScroll>
+
                     </div>
                 </div>
             </section>
