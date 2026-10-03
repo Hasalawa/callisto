@@ -564,7 +564,7 @@ const Home = ({ navigateTo }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-sm mb-1">Call Us</p>
-                                        <p className="text-white font-bold text-xl">+94 71 234 5678</p>
+                                        <p className="text-white font-bold text-xl">+94 74 072 9268</p>
                                     </div>
                                 </div>
 
@@ -575,7 +575,7 @@ const Home = ({ navigateTo }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-sm mb-1">Email Us</p>
-                                        <p className="text-white font-bold text-xl">hello@callisto.lk</p>
+                                        <p className="text-white font-bold text-xl">callistosoftwaresolution@gmail.com</p>
                                     </div>
                                 </div>
 
@@ -586,7 +586,7 @@ const Home = ({ navigateTo }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-sm mb-1">Visit Us</p>
-                                        <p className="text-white font-bold text-xl">Colombo, Sri Lanka</p>
+                                        <p className="text-white font-bold text-xl">Matara, Sri Lanka</p>
                                     </div>
                                 </div>
                             </div>
