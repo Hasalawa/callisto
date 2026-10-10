@@ -51,12 +51,19 @@ jobs:
 
             const wanted = new Set();
 
-            for (const [label, re] of TYPE_RULES) {
-              if (re.test(text)) wanted.add(label);
+            // Issues made from our Bug / Feature templates: the title prefix decides the type.
+            // (Otherwise a word like "error" inside a feature request would add `bug`.)
+            // Everything else is typed by keywords.
+            const fromTemplate = /^\[(?:bug|feature)\]/.test(title);
+            if (fromTemplate) {
+              wanted.add(title.startsWith('[bug]') ? 'bug' : 'enhancement');
+            } else {
+              for (const [label, re] of TYPE_RULES) {
+                if (re.test(text)) wanted.add(label);
+              }
             }
 
             // Questions: judged by the title only, and not for bug/feature template issues.
-            const fromTemplate = /^\[(?:bug|feature)\]/.test(title);
             if (/^\[question\]/.test(title) ||
                 (!fromTemplate && (/\?\s*$/.test(title) || /^(?:how|what|why|where|can|could|should|is|does|do)\b/.test(title)))) {
               wanted.add('question');
