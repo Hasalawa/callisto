@@ -1,0 +1,94 @@
+name: Issue Labeler
+
+# Automatically adds labels to every newly opened issue, based on its title and body.
+# It only ADDS labels (never removes), so labels you change by hand are left alone.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    name: Label new issue
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Add labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = (issue.title || '').toLowerCase();
+            const text = `${title}\n${(issue.body || '').toLowerCase()}`;
+
+            // Label definitions. Missing labels are created automatically with these colors.
+            const LABELS = {
+              'bug':           { color: 'd73a4a', description: "Something isn't working" },
+              'enhancement':   { color: 'a2eeef', description: 'New feature or request' },
+              'documentation': { color: '0075ca', description: 'Improvements or additions to documentation' },
+              'question':      { color: 'd876e3', description: 'Further information is requested' },
+              'frontend':      { color: '1d76db', description: 'React / Vite / UI' },
+              'backend':       { color: '5319e7', description: 'Express API / contact email' },
+              'deployment':    { color: 'fbca04', description: 'Vercel / CI / build' },
+              'needs-triage':  { color: 'ededed', description: 'Not yet reviewed - type unclear' },
+            };
+
+            // Type labels: what kind of issue is it?
+            const TYPE_RULES = [
+              ['bug', /\[bug\]|\b(?:bug|error|errors|crash\w*|broken|fail\w*|exception|not working|doesn'?t work|isn'?t working|regression)\b/],
+              ['enhancement', /\[feature\]|\b(?:feature|enhancement|improv\w+|suggest\w*|would be nice|nice to have|add support|new page)\b/],
+              ['documentation', /\b(?:docs?|documentation|readme|typo)\b/],
+            ];
+
+            // Area labels: which part of the project does it touch?
+            const AREA_RULES = [
+              ['frontend', /\b(?:frontend|front-end|react|vite|tailwind|css|navbar|footer|component|responsive|layout|animation|ui|ux|button|swiper|framer|home page)\b/],
+              ['backend', /\b(?:backend|back-end|express|api|server|nodemailer|smtp|gmail|email|e-mail|cors|endpoint|contact form)\b/],
+              ['deployment', /\b(?:vercel|deploy\w*|hosting|ci\/cd|github actions?|workflow|pipeline)\b/],
+            ];
+
+            const wanted = new Set();
+
+            for (const [label, re] of TYPE_RULES) {
+              if (re.test(text)) wanted.add(label);
+            }
+
+            // Questions: judged by the title only, and not for bug/feature template issues.
+            const fromTemplate = /^\[(?:bug|feature)\]/.test(title);
+            if (/^\[question\]/.test(title) ||
+                (!fromTemplate && (/\?\s*$/.test(title) || /^(?:how|what|why|where|can|could|should|is|does|do)\b/.test(title)))) {
+              wanted.add('question');
+            }
+
+            for (const [label, re] of AREA_RULES) {
+              if (re.test(text)) wanted.add(label);
+            }
+
+            // No type label found -> flag it for a human to look at.
+            const TYPES = ['bug', 'enhancement', 'documentation', 'question'];
+            if (!TYPES.some((t) => wanted.has(t))) wanted.add('needs-triage');
+
+            // Create any label that does not exist yet (with a nice color + description).
+            for (const name of wanted) {
+              try {
+                await github.rest.issues.getLabel({ ...context.repo, name });
+              } catch (err) {
+                if (err.status !== 404) throw err;
+                try {
+                  await github.rest.issues.createLabel({ ...context.repo, name, ...LABELS[name] });
+                } catch (createErr) {
+                  // 422 = someone created it at the same moment; that's fine.
+                  if (createErr.status !== 422) throw createErr;
+                }
+              }
+            }
+
+            const labels = [...wanted];
+            await github.rest.issues.addLabels({
+              ...context.repo,
+              issue_number: issue.number,
+              labels,
+            });
+            core.info(`Issue #${issue.number}: added labels -> ${labels.join(', ')}`);
