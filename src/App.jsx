@@ -4,9 +4,15 @@ import Home from './pages/Home';
 import PlatformPage from './pages/Platform';
 import ServiceDetail from './pages/ServiceDetail';
 import ProjectDetail from './pages/ProjectDetail';
+import NotFound from './pages/NotFound';
 import { LoadingScreen } from './components/PageComponents';
 
+// The site never changes the address itself, so "/" (and "/index.html") are the only real paths.
+// Anything else, like a mistyped address, shows the Not Found page.
+const KNOWN_PATHS = ['/', '/index.html'];
+
 const App = () => {
+  const [unknownPath, setUnknownPath] = useState(() => !KNOWN_PATHS.includes(window.location.pathname));
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
   const [currentServiceId, setCurrentServiceId] = useState(null); // Track which service was clicked
@@ -35,6 +41,19 @@ const App = () => {
       setCurrentPage(destination);
     }
   };
+
+  // Keep this below all hooks (hooks must run before any early return).
+  if (unknownPath) {
+    return (
+      <NotFound
+        path={window.location.pathname}
+        onHome={() => {
+          window.history.replaceState({}, '', '/'); // put "/" back in the address bar
+          setUnknownPath(false);
+        }}
+      />
+    );
+  }
 
   if (loading) {
     return <LoadingScreen title="CALLISTO" subtitle="SYSTEM INITIALIZING..." />;
