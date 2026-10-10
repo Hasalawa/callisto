@@ -56,8 +56,8 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/Hasalawa/callisto-software.git](https://github.com/Hasalawa/callisto-software.git)
-   cd callisto-software
+   git clone https://github.com/Hasalawa/callisto.git
+   cd callisto
    ```
 
 2. **Install dependencies**
@@ -87,6 +87,16 @@ If you prefer to run the project in a containerized environment (no local Node.j
    ```bash
    docker-compose down
    ```
+
+## 🤝 Contributing
+
+Contributions are welcome! The short version:
+
+1. Pick an open issue, preferably one labeled `good first issue` or `help wanted`.
+2. Comment **`/assign`** on it. You are assigned automatically. Comment `/unassign` if you can't continue.
+3. Open a pull request that includes `Closes #<issue number>` in its description.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide: how claiming works, labels, local setup (including the backend) and the pull request checklist.
 
 ## 👨‍💻 Authors
 
