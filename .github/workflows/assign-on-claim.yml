@@ -1,0 +1,89 @@
+name: Assign on claim
+
+# Anyone who comments `/assign` (or "assign me", "I'll take this", "can I work on this?")
+# on an issue is assigned to it automatically.
+#   - One owner per issue: if someone is already assigned, the commenter is told who.
+#   - `/unassign` removes the commenter again so others can claim the issue.
+# Note: issue_comment workflows only run from the default branch, so this file
+# must be merged into `main` before it starts working.
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  assign:
+    name: Handle claim / unclaim
+    # Real issues only (not pull requests), and only comments written by people.
+    if: ${{ !github.event.issue.pull_request && github.event.comment.user.type != 'Bot' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Assign or unassign the commenter
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { issue: payloadIssue, comment } = context.payload;
+            const user = comment.user.login;
+            const body = (comment.body || '').toLowerCase();
+            const number = payloadIssue.number;
+
+            // Slash commands must start a line; plain phrases work anywhere.
+            const CLAIM_CMD   = /(?:^|\n)[ \t]*\/(?:assign|claim|take)\b/;
+            const CLAIM_TEXT  = /\bassign me\b|\bi['’]?ll take (?:this|it)\b|\bi['’]?d like to (?:work on|take) this\b|\bcan i (?:work on|take) this\b/;
+            const UNCLAIM_CMD = /(?:^|\n)[ \t]*\/(?:unassign|unclaim|release)\b/;
+
+            const isUnclaim = UNCLAIM_CMD.test(body);
+            const isClaim = !isUnclaim && (CLAIM_CMD.test(body) || CLAIM_TEXT.test(body));
+            if (!isUnclaim && !isClaim) return; // ordinary comment, nothing to do
+
+            const reply = (text) => github.rest.issues.createComment({
+              ...context.repo, issue_number: number, body: text,
+            });
+
+            // Re-read the issue so we act on its current state, not the event snapshot.
+            const { data: issue } = await github.rest.issues.get({ ...context.repo, issue_number: number });
+            const assignees = (issue.assignees || []).map((a) => a.login);
+            const me = user.toLowerCase();
+            const alreadyMine = assignees.some((a) => a.toLowerCase() === me);
+
+            if (isUnclaim) {
+              if (!alreadyMine) {
+                await reply(`@${user} you are not assigned to this issue, so there is nothing to unassign.`);
+                return;
+              }
+              await github.rest.issues.removeAssignees({
+                ...context.repo, issue_number: number, assignees: [user],
+              });
+              await reply(`@${user} has been unassigned. The issue is open again - anyone can claim it with \`/assign\`.`);
+              return;
+            }
+
+            // --- claim ---
+            if (issue.state !== 'open') {
+              await reply(`@${user} this issue is closed, so it can't be assigned.`);
+              return;
+            }
+            if (alreadyMine) {
+              await reply(`@${user} you are already assigned to this issue.`);
+              return;
+            }
+            if (assignees.length > 0) {
+              const who = assignees.map((a) => `@${a}`).join(', ');
+              await reply(`@${user} this issue is already assigned to ${who}. Please pick another issue, or ask them to comment \`/unassign\` if they can't work on it.`);
+              return;
+            }
+
+            const { data: updated } = await github.rest.issues.addAssignees({
+              ...context.repo, issue_number: number, assignees: [user],
+            });
+            const assigned = (updated.assignees || []).some((a) => a.login.toLowerCase() === me);
+
+            if (!assigned) {
+              // GitHub silently skips users it can't assign (e.g. no access to the repository).
+              await reply(`@${user} I couldn't assign you automatically. A maintainer can assign you manually from the issue sidebar.`);
+              return;
+            }
+            await reply(`Assigned to @${user}. Thanks for picking this up! If you can't finish it, comment \`/unassign\` so someone else can take it.`);
