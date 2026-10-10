@@ -1,0 +1,34 @@
+name: Bug report
+description: Something isn't working on the website or the contact form
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what you saw and what you expected to see instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See the problem
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does it happen?
+      options:
+        - Website (frontend)
+        - Contact form / email (backend)
+        - Deployment / Vercel
+        - Not sure
+  - type: input
+    id: device
+    attributes:
+      label: Browser / device
+      placeholder: Chrome on Windows, Safari on iPhone ...

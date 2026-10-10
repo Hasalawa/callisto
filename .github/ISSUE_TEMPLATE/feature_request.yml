@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest an idea or improvement for Callisto
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+      description: Describe the feature or improvement.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful?
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part does it affect?
+      options:
+        - Website (frontend)
+        - Contact form / email (backend)
+        - Deployment / Vercel
+        - Not sure
