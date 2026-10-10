@@ -1,0 +1,7 @@
+# Every file in this repository is owned by the maintainer.
+#
+# With "Require review from Code Owners" turned on for `main`
+# (Settings -> Branches -> branch protection rule), a pull request can only be merged
+# after @Hasalawa has approved it. This file on its own only requests the review,
+# the branch protection rule is what blocks the merge.
+*       @Hasalawa
