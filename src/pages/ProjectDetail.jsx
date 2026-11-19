@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowUpRight, Check, Code, Globe, Monitor, Layers, Cpu, ChevronLeft, ChevronRight, PlayCircle, MapPin, Landmark, Store, Gem, MessageSquare, ShoppingCart, Terminal, Shield } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, Code, Globe, Monitor, Layers, Cpu, ChevronLeft, ChevronRight, PlayCircle, MapPin, Landmark, Store, Gem, MessageSquare, ShoppingCart, Terminal, Shield, Send, Mail, X } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
 import Footer from '../components/Footer';
 import { LoadingScreen } from '../components/PageComponents';
@@ -90,6 +90,24 @@ const ProjectDetail = ({ projectId, onBack }) => {
     const [loading, setLoading] = useState(true);
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+    const [showBuildAlert, setShowBuildAlert] = useState(false);
+    const [showContactModal, setShowContactModal] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [status, setStatus] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const alertTimeoutRef = useRef(null);
+
+    const servicesList = [
+        "Custom Software Development",
+        "Web Application Development",
+        "Mobile App Development (iOS & Android)",
+        "UI/UX Design & Prototyping",
+        "E-Commerce Solutions",
+        "Cloud Architecture & DevOps",
+        "Enterprise ERP/CRM Systems",
+        "Software Maintenance & Support"
+    ];
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -255,6 +273,109 @@ const ProjectDetail = ({ projectId, onBack }) => {
     const project = getProjectData(projectId);
     const ProjectIcon = project.icon;
 
+    const [formData, setFormData] = useState({
+        name: '',
+        company: '',
+        email: '',
+        service: project.title,
+        message: ''
+    });
+
+    useEffect(() => {
+        setFormData((prev) => ({ ...prev, service: project.title }));
+    }, [project.title]);
+
+    useEffect(() => {
+        document.body.style.overflow = showContactModal ? 'hidden' : 'unset';
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [showContactModal]);
+
+    useEffect(() => {
+        return () => {
+            if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+        };
+    }, []);
+
+    const handleInitiateBuild = () => {
+        if (showBuildAlert || showContactModal) return;
+
+        setFormData((prev) => ({ ...prev, service: project.title }));
+        setStatus('');
+        setErrorMessage('');
+        setShowBuildAlert(true);
+
+        alertTimeoutRef.current = setTimeout(() => {
+            setShowBuildAlert(false);
+            setShowContactModal(true);
+        }, 2000);
+    };
+
+    const handleCloseModal = () => {
+        setShowContactModal(false);
+        setShowConfirm(false);
+        setStatus('');
+        setErrorMessage('');
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!re.test(String(email).toLowerCase())) return false;
+
+        const typoDomains = [
+            'gail.com', 'gamil.com', 'gnail.com', 'gmaill.com', 'gmail.con', 'gmai.com',
+            'yaho.com', 'yahhoo.com', 'yhoo.com',
+            'outlok.com', 'outlook.con', 'hotmal.com'
+        ];
+        return !typoDomains.includes(email.split('@')[1].toLowerCase());
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.company || !formData.email || !formData.service || !formData.message) {
+            setStatus('error');
+            setErrorMessage('All fields are required. Please fill in the missing information.');
+            return;
+        }
+        if (!validateEmail(formData.email)) {
+            setStatus('error');
+            setErrorMessage('Please enter a valid email address.');
+            return;
+        }
+        setErrorMessage('');
+        setShowConfirm(true);
+    };
+
+    const confirmAndSend = async () => {
+        setShowConfirm(false);
+        setStatus('loading');
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setStatus('success');
+                setFormData({ name: '', company: '', email: '', service: project.title, message: '' });
+                setTimeout(() => {
+                    setStatus('');
+                    setShowContactModal(false);
+                }, 3000);
+            } else {
+                throw new Error('Failed to send');
+            }
+        } catch (error) {
+            setStatus('error');
+            setErrorMessage('Failed to send the message. Please try again later.');
+        }
+    };
+
     if (loading) {
         return <LoadingScreen title="CALLISTO" subtitle="PROJECT INITIALIZING..." />;
     }
@@ -269,6 +390,156 @@ const ProjectDetail = ({ projectId, onBack }) => {
 
             <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-orange-600 to-red-600 z-[100] origin-left shadow-[0_0_15px_rgba(220,38,38,0.8)]" style={{ scaleX }} />
             <ParticleBackground />
+
+            <AnimatePresence>
+                {showBuildAlert && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 50 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="fixed top-6 right-6 z-[120] bg-[#0a0a0a]/95 backdrop-blur-xl border border-red-500/30 px-5 py-4 rounded-2xl shadow-[0_0_30px_rgba(220,38,38,0.25)] flex items-center gap-4 w-[90%] max-w-sm"
+                    >
+                        <div className="w-10 h-10 bg-red-900/20 rounded-full flex items-center justify-center border border-red-500/30 animate-pulse shrink-0">
+                            <Send className="text-red-500" size={18} />
+                        </div>
+                        <div>
+                            <h4 className="text-white font-bold text-sm tracking-wide">
+                                Build Request Ready
+                            </h4>
+                            <p className="text-gray-400 text-xs font-mono mt-0.5">
+                                Opening inquiry form for <span className="text-red-400">{project.title}</span>...
+                            </p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* --- POPUP CONTACT FORM MODAL --- */}
+            <AnimatePresence>
+                {showContactModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={handleCloseModal}
+                        className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-[2rem] shadow-[0_0_60px_rgba(220,38,38,0.2)] relative overflow-hidden w-full max-w-2xl my-8"
+                        >
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-60"></div>
+
+                            <div className="flex items-start justify-between mb-6 relative z-10">
+                                <div>
+                                    <span className="text-red-500 font-mono text-[10px] tracking-[0.2em] uppercase block mb-1">
+                                        /// Project Inquiry
+                                    </span>
+                                    <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
+                                        Initiate <span className="text-red-600">Similar Build</span>
+                                    </h3>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={handleCloseModal}
+                                    className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-red-500/50 hover:bg-red-600/20 transition-all"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            <AnimatePresence>
+                                {showConfirm && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]/95 backdrop-blur-md rounded-[2rem]"
+                                    >
+                                        <div className="text-center p-8 border border-white/10 rounded-2xl bg-black/60 shadow-[0_0_30px_rgba(220,38,38,0.15)] mx-6">
+                                            <div className="w-16 h-16 bg-red-900/20 border border-red-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <Mail className="text-red-500" size={28} />
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Confirm Email</h3>
+                                            <p className="text-gray-400 mb-6 font-mono text-sm leading-relaxed">
+                                                Is the entered email correct?<br />
+                                                <span className="text-red-500 font-bold text-base bg-red-900/10 px-3 py-1 rounded-md inline-block mt-2 tracking-wide">{formData.email}</span>
+                                            </p>
+                                            <div className="flex gap-4 justify-center">
+                                                <button type="button" onClick={() => setShowConfirm(false)} className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition-all font-mono text-sm">
+                                                    NO, EDIT
+                                                </button>
+                                                <button type="button" onClick={confirmAndSend} className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] font-mono text-sm">
+                                                    YES, SEND
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div className="flex flex-col space-y-2">
+                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Name</label>
+                                        <input type="text" name="name" value={formData.name} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="John Doe" />
+                                    </div>
+                                    <div className="flex flex-col space-y-2">
+                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Company</label>
+                                        <input type="text" name="company" value={formData.company} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="Company Inc." />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div className="flex flex-col space-y-2">
+                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Email Address</label>
+                                        <input type="email" name="email" value={formData.email} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="john@example.com" />
+                                    </div>
+                                    <div className="flex flex-col space-y-2">
+                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Project / Service</label>
+                                        <select name="service" value={formData.service} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all appearance-none cursor-pointer">
+                                            <option value={project.title} className="bg-[#0a0a0a]">{project.title}</option>
+                                            {servicesList.map((srv, idx) => (
+                                                <option key={idx} value={srv} className="bg-[#0a0a0a]">{srv}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col space-y-2">
+                                    <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Tell us about your project</label>
+                                    <textarea name="message" value={formData.message} onChange={handleChange} rows="4" className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all resize-none" placeholder="Describe your requirements, goals, and timeline..."></textarea>
+                                </div>
+
+                                {status === 'error' && (
+                                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm font-mono text-center">
+                                        ERROR: {errorMessage}
+                                    </motion.div>
+                                )}
+                                {status === 'success' && (
+                                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg text-green-400 text-sm font-mono text-center">
+                                        SUCCESS: Transmission completed. We will contact you shortly.
+                                    </motion.div>
+                                )}
+
+                                <div className="pt-2">
+                                    <button type="submit" disabled={status === 'loading'} className={`w-full group relative px-12 py-4 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-xl overflow-hidden transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_40px_rgba(220,38,38,0.5)] ${status === 'loading' ? 'opacity-75 cursor-wait' : ''}`}>
+                                        <span className="relative z-10 flex items-center justify-center gap-3">
+                                            {status === 'loading' ? 'TRANSMITTING...' : 'SEND MESSAGE'}
+                                        </span>
+                                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full ease-in-out"></div>
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="max-w-7xl mx-auto mb-24 relative z-20 mt-10">
 
@@ -478,7 +749,7 @@ const ProjectDetail = ({ projectId, onBack }) => {
                     </div>
 
                     <div className="mt-20 flex justify-center relative z-10">
-                        <button className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-full overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] transition-all transform hover:-translate-y-1 ring-1 ring-red-500/50">
+                        <button className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-full overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] transition-all transform hover:-translate-y-1 ring-1 ring-red-500/50" onClick={handleInitiateBuild}>
                             <span className="relative z-10 flex items-center gap-3">
                                 INITIATE SIMILAR BUILD <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={20} />
                             </span>
