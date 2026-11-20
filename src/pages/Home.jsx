@@ -494,7 +494,7 @@ const Home = ({ navigateTo }) => {
                             },
                             {
                                 name: "Tharindra Dasuni",
-                                role: "Co-Founder",
+                                role: "Co-Founder / CHRO",
                                 img: tharindraImg,
                                 socials: {
                                     github: "https://github.com/TharindraDasuni",
