@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowUpRight, Check, Code, Globe, Monitor, Layers, Cpu, ChevronLeft, ChevronRight, PlayCircle, MapPin, Landmark, Store, Gem, MessageSquare, ShoppingCart, Terminal, Shield, Send, Mail, X } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, Code, Globe, Monitor, Layers, Cpu, ChevronLeft, ChevronRight, PlayCircle, MapPin, Landmark, Store, Gem, MessageSquare, ShoppingCart, Terminal, Shield, Send, Mail, X, User, Building2, CheckCircle2, AlertCircle, ShieldCheck, Zap } from 'lucide-react';
 import { ParticleBackground } from '../components/Shared';
 import Footer from '../components/Footer';
 import { LoadingScreen } from '../components/PageComponents';
@@ -391,31 +391,61 @@ const ProjectDetail = ({ projectId, onBack }) => {
             <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-orange-600 to-red-600 z-[100] origin-left shadow-[0_0_15px_rgba(220,38,38,0.8)]" style={{ scaleX }} />
             <ParticleBackground />
 
+            {/* --- BUILD REQUEST NOTIFICATION TOAST ALERT --- */}
             <AnimatePresence>
                 {showBuildAlert && (
                     <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="fixed top-6 right-6 z-[120] bg-[#0a0a0a]/95 backdrop-blur-xl border border-red-500/30 px-5 py-4 rounded-2xl shadow-[0_0_30px_rgba(220,38,38,0.25)] flex items-center gap-4 w-[90%] max-w-sm"
+                        initial={{ opacity: 0, x: 60, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: 60, scale: 0.95 }}
+                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        className="fixed top-6 right-6 z-[160] bg-[#0a0a0a]/95 backdrop-blur-2xl border border-red-500/40 p-5 rounded-2xl shadow-[0_0_50px_rgba(220,38,38,0.35)] w-[92%] max-w-sm overflow-hidden"
                     >
-                        <div className="w-10 h-10 bg-red-900/20 rounded-full flex items-center justify-center border border-red-500/30 animate-pulse shrink-0">
-                            <Send className="text-red-500" size={18} />
+                        {/* Glowing top line */}
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
+
+                        <div className="flex items-center gap-4">
+                            <div className="relative w-12 h-12 rounded-xl bg-red-950/60 border border-red-500/50 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(220,38,38,0.4)]">
+                                <span className="animate-ping absolute inset-0 rounded-xl bg-red-500/30" />
+                                <Cpu className="text-red-500 relative z-10 animate-pulse" size={22} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                                    <span className="text-[10px] font-mono text-red-500 font-bold tracking-[0.2em] uppercase">
+                                        BUILD PROTOCOL READY
+                                    </span>
+                                </div>
+                                <h4 className="text-white font-black text-sm tracking-wide uppercase truncate">
+                                    INITIALIZING INQUIRY
+                                </h4>
+                                <p className="text-gray-400 text-xs font-mono mt-0.5 truncate">
+                                    Opening build manifest for <span className="text-red-400 font-semibold">{project.title}</span>...
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 className="text-white font-bold text-sm tracking-wide">
-                                Build Request Ready
-                            </h4>
-                            <p className="text-gray-400 text-xs font-mono mt-0.5">
-                                Opening inquiry form for <span className="text-red-400">{project.title}</span>...
-                            </p>
+
+                        {/* Animated 2s countdown line */}
+                        <div className="mt-3.5 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-gray-500">
+                            <span className="text-red-400/80 flex items-center gap-1.5">
+                                <Zap size={11} className="text-red-500 animate-pulse" />
+                                SYS_ROUTING // SECURE_SOCKET
+                            </span>
+                            <span className="text-gray-400">02s</span>
+                        </div>
+                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden mt-1.5">
+                            <motion.div
+                                className="h-full bg-gradient-to-r from-red-600 via-orange-500 to-red-600"
+                                initial={{ width: "0%" }}
+                                animate={{ width: "100%" }}
+                                transition={{ duration: 2, ease: "linear" }}
+                            />
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* --- POPUP CONTACT FORM MODAL --- */}
+            {/* --- NEXT-LEVEL POPUP CONTACT FORM MODAL --- */}
             <AnimatePresence>
                 {showContactModal && (
                     <motion.div
@@ -423,59 +453,83 @@ const ProjectDetail = ({ projectId, onBack }) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={handleCloseModal}
-                        className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto"
+                        className="fixed inset-0 z-[150] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto"
                     >
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                            initial={{ opacity: 0, scale: 0.92, y: 25 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            exit={{ opacity: 0, scale: 0.92, y: 25 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 220 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-[2rem] shadow-[0_0_60px_rgba(220,38,38,0.2)] relative overflow-hidden w-full max-w-2xl my-8"
+                            className="bg-[#0a0a0a]/95 backdrop-blur-2xl border border-red-500/20 p-6 md:p-10 rounded-[2.5rem] shadow-[0_0_80px_rgba(220,38,38,0.25)] relative overflow-hidden w-full max-w-2xl my-8 group/modal"
                         >
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-60"></div>
+                            {/* Cyber ambient glow orbs */}
+                            <div className="absolute -top-32 -right-32 w-80 h-80 bg-red-600/15 rounded-full blur-[100px] pointer-events-none group-hover/modal:bg-red-600/25 transition-all duration-700" />
+                            <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-orange-600/10 rounded-full blur-[100px] pointer-events-none" />
 
-                            <div className="flex items-start justify-between mb-6 relative z-10">
+                            {/* Top glowing cyber accent line */}
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-[0_0_20px_rgba(220,38,38,0.8)]" />
+
+                            {/* Modal Header */}
+                            <div className="flex items-start justify-between mb-8 relative z-10 border-b border-white/5 pb-6">
                                 <div>
-                                    <span className="text-red-500 font-mono text-[10px] tracking-[0.2em] uppercase block mb-1">
-                                        /// Project Inquiry
-                                    </span>
-                                    <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
-                                        Initiate <span className="text-red-600">Similar Build</span>
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                        <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                                        <span className="text-red-500 font-mono text-[10px] tracking-[0.25em] uppercase font-bold">
+                                            /// PROJECT INQUIRY // CALLISTO SECURE
+                                        </span>
+                                    </div>
+                                    <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-2.5 flex-wrap">
+                                        INITIATE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">SIMILAR BUILD</span>
                                     </h3>
+                                    <p className="text-gray-400 text-xs font-mono mt-1">
+                                        Deploy a tailored software architecture modeled after {project.title}.
+                                    </p>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={handleCloseModal}
-                                    className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-red-500/50 hover:bg-red-600/20 transition-all"
+                                    className="p-2.5 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-red-500/60 hover:bg-red-600/20 transition-all hover:rotate-90 duration-300 shadow-md shrink-0"
                                 >
                                     <X size={20} />
                                 </button>
                             </div>
 
+                            {/* Email Confirmation Overlay */}
                             <AnimatePresence>
                                 {showConfirm && (
                                     <motion.div
-                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        initial={{ opacity: 0, scale: 0.94 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.95 }}
-                                        className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]/95 backdrop-blur-md rounded-[2rem]"
+                                        exit={{ opacity: 0, scale: 0.94 }}
+                                        className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]/98 backdrop-blur-xl rounded-[2.5rem] p-6"
                                     >
-                                        <div className="text-center p-8 border border-white/10 rounded-2xl bg-black/60 shadow-[0_0_30px_rgba(220,38,38,0.15)] mx-6">
-                                            <div className="w-16 h-16 bg-red-900/20 border border-red-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                <Mail className="text-red-500" size={28} />
+                                        <div className="text-center p-8 border border-red-500/30 rounded-3xl bg-black/80 shadow-[0_0_50px_rgba(220,38,38,0.25)] max-w-md w-full relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+                                            <div className="w-16 h-16 bg-red-950/60 border border-red-500/40 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(220,38,38,0.4)]">
+                                                <ShieldCheck className="text-red-500" size={32} />
                                             </div>
-                                            <h3 className="text-2xl font-bold text-white mb-2">Confirm Email</h3>
-                                            <p className="text-gray-400 mb-6 font-mono text-sm leading-relaxed">
-                                                Is the entered email correct?<br />
-                                                <span className="text-red-500 font-bold text-base bg-red-900/10 px-3 py-1 rounded-md inline-block mt-2 tracking-wide">{formData.email}</span>
+                                            <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-2">Authorize Transmission</h3>
+                                            <p className="text-gray-300 mb-6 font-sans text-sm leading-relaxed">
+                                                Verify your contact email address. Our engineering team will dispatch the project build proposal here:<br />
+                                                <span className="text-red-400 font-mono font-bold text-sm bg-red-950/60 border border-red-500/40 px-3.5 py-1.5 rounded-lg inline-block mt-3 tracking-wide break-all shadow-inner">
+                                                    {formData.email}
+                                                </span>
                                             </p>
                                             <div className="flex gap-4 justify-center">
-                                                <button type="button" onClick={() => setShowConfirm(false)} className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition-all font-mono text-sm">
-                                                    NO, EDIT
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirm(false)}
+                                                    className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition-all font-sans text-xs font-semibold tracking-wider"
+                                                >
+                                                    ABORT / EDIT
                                                 </button>
-                                                <button type="button" onClick={confirmAndSend} className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] font-mono text-sm">
-                                                    YES, SEND
+                                                <button
+                                                    type="button"
+                                                    onClick={confirmAndSend}
+                                                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.5)] font-sans text-xs tracking-wider flex items-center gap-2"
+                                                >
+                                                    <Send size={14} /> AUTHORIZE & TRANSMIT
                                                 </button>
                                             </div>
                                         </div>
@@ -483,54 +537,135 @@ const ProjectDetail = ({ projectId, onBack }) => {
                                 )}
                             </AnimatePresence>
 
+                            {/* Form */}
                             <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div className="flex flex-col space-y-2">
-                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Name</label>
-                                        <input type="text" name="name" value={formData.name} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="John Doe" />
+                                        <label className="text-xs md:text-sm font-sans font-semibold text-gray-200 tracking-wide flex items-center gap-2">
+                                            <User size={15} className="text-red-500" /> Client Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            className="bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 focus:ring-1 focus:ring-red-500/50 transition-all font-sans text-sm"
+                                            placeholder="Enter your full name"
+                                        />
                                     </div>
                                     <div className="flex flex-col space-y-2">
-                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Company</label>
-                                        <input type="text" name="company" value={formData.company} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="Company Inc." />
+                                        <label className="text-xs md:text-sm font-sans font-semibold text-gray-200 tracking-wide flex items-center gap-2">
+                                            <Building2 size={15} className="text-red-500" /> Company / Organization
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="company"
+                                            value={formData.company}
+                                            onChange={handleChange}
+                                            className="bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 focus:ring-1 focus:ring-red-500/50 transition-all font-sans text-sm"
+                                            placeholder="e.g. Acme Enterprises"
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div className="flex flex-col space-y-2">
-                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Email Address</label>
-                                        <input type="email" name="email" value={formData.email} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all" placeholder="john@example.com" />
+                                        <label className="text-xs md:text-sm font-sans font-semibold text-gray-200 tracking-wide flex items-center gap-2">
+                                            <Mail size={15} className="text-red-500" /> Business Email Address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            className="bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 focus:ring-1 focus:ring-red-500/50 transition-all font-sans text-sm"
+                                            placeholder="you@company.com"
+                                        />
                                     </div>
                                     <div className="flex flex-col space-y-2">
-                                        <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Project / Service</label>
-                                        <select name="service" value={formData.service} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all appearance-none cursor-pointer">
-                                            <option value={project.title} className="bg-[#0a0a0a]">{project.title}</option>
-                                            {servicesList.map((srv, idx) => (
-                                                <option key={idx} value={srv} className="bg-[#0a0a0a]">{srv}</option>
-                                            ))}
+                                        <label className="text-xs md:text-sm font-sans font-semibold text-gray-200 tracking-wide flex items-center gap-2">
+                                            <Terminal size={15} className="text-red-500" /> Project / Service Scope
+                                        </label>
+                                        <select
+                                            name="service"
+                                            value={formData.service}
+                                            onChange={handleChange}
+                                            className="bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/70 focus:ring-1 focus:ring-red-500/50 transition-all font-sans text-sm appearance-none cursor-pointer"
+                                        >
+                                            <option value={project.title} className="bg-[#0a0a0a] text-white">
+                                                {project.title} (Selected Reference)
+                                            </option>
+                                            {servicesList
+                                                .filter(s => s !== project.title)
+                                                .map((srv, idx) => (
+                                                    <option key={idx} value={srv} className="bg-[#0a0a0a] text-white">
+                                                        {srv}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col space-y-2">
-                                    <label className="text-xs font-mono text-gray-500 uppercase tracking-widest">Tell us about your project</label>
-                                    <textarea name="message" value={formData.message} onChange={handleChange} rows="4" className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all resize-none" placeholder="Describe your requirements, goals, and timeline..."></textarea>
+                                    <label className="text-xs md:text-sm font-sans font-semibold text-gray-200 tracking-wide flex items-center justify-between">
+                                        <span className="flex items-center gap-2">
+                                            <Code size={15} className="text-red-500" /> Project Specifications & Goals
+                                        </span>
+                                        <span className="text-[11px] font-mono text-red-400/90 bg-red-950/50 border border-red-500/30 px-2 py-0.5 rounded font-normal">REQUIRED</span>
+                                    </label>
+                                    <textarea
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        rows="4"
+                                        className="bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 focus:ring-1 focus:ring-red-500/50 transition-all resize-none font-sans text-sm"
+                                        placeholder="Outline your requirements, target platforms, custom features, timeline, and deliverables..."
+                                    ></textarea>
                                 </div>
 
                                 {status === 'error' && (
-                                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm font-mono text-center">
-                                        ERROR: {errorMessage}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-3.5 bg-red-950/40 border border-red-500/40 rounded-xl text-red-400 text-xs font-mono flex items-center gap-3 shadow-inner"
+                                    >
+                                        <AlertCircle size={16} className="text-red-500 shrink-0" />
+                                        <span>ERROR: {errorMessage}</span>
                                     </motion.div>
                                 )}
+
                                 {status === 'success' && (
-                                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg text-green-400 text-sm font-mono text-center">
-                                        SUCCESS: Transmission completed. We will contact you shortly.
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-4 bg-green-950/40 border border-green-500/40 rounded-xl text-green-400 text-xs font-mono flex items-center gap-3 shadow-[0_0_20px_rgba(34,197,94,0.2)]"
+                                    >
+                                        <CheckCircle2 size={18} className="text-green-500 shrink-0 animate-bounce" />
+                                        <div>
+                                            <p className="font-bold uppercase tracking-wider">BUILD INQUIRY TRANSMITTED</p>
+                                            <p className="text-gray-400 text-[11px] mt-0.5">We have received your specifications. Our lead engineer will contact you shortly.</p>
+                                        </div>
                                     </motion.div>
                                 )}
 
                                 <div className="pt-2">
-                                    <button type="submit" disabled={status === 'loading'} className={`w-full group relative px-12 py-4 bg-gradient-to-r from-red-600 to-red-800 text-white font-black tracking-widest text-sm rounded-xl overflow-hidden transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_40px_rgba(220,38,38,0.5)] ${status === 'loading' ? 'opacity-75 cursor-wait' : ''}`}>
+                                    <button
+                                        type="submit"
+                                        disabled={status === 'loading'}
+                                        className={`w-full group relative px-10 py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white font-black tracking-widest text-sm rounded-xl overflow-hidden transition-all shadow-[0_0_30px_rgba(220,38,38,0.35)] hover:shadow-[0_0_50px_rgba(220,38,38,0.6)] ring-1 ring-red-500/40 hover:ring-red-400 ${status === 'loading' ? 'opacity-75 cursor-wait' : ''}`}
+                                    >
                                         <span className="relative z-10 flex items-center justify-center gap-3">
-                                            {status === 'loading' ? 'TRANSMITTING...' : 'SEND MESSAGE'}
+                                            {status === 'loading' ? (
+                                                <>
+                                                    <Cpu size={18} className="animate-spin text-white" />
+                                                    TRANSMITTING INQUIRY...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Send size={16} className="group-hover:translate-x-1 transition-transform" />
+                                                    TRANSMIT BUILD SPECIFICATIONS
+                                                </>
+                                            )}
                                         </span>
                                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full ease-in-out"></div>
                                     </button>
