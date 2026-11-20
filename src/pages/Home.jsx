@@ -12,6 +12,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Pagination, Autoplay } from 'swiper/modules';
 
+import kehanImg from '../assets/team/kehan.jpg';
+import tharindraImg from '../assets/team/tharindra.jpg';
+import sahanImg from '../assets/team/sahan.jpg';
+import thusharaImg from '../assets/team/thushara.jpg';
+import prasannaImg from '../assets/team/prasanna.jpg';
+import krishanImg from '../assets/team/krishan.jpg';
+
 const Home = ({ navigateTo }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
@@ -477,56 +484,59 @@ const Home = ({ navigateTo }) => {
                         {[
                             {
                                 name: "Kehan Hasalawa",
-                                role: "Founder / CEO",
-                                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800",
+                                role: "Founder",
+                                img: kehanImg,
                                 socials: {
-                                    github: "https://github.com/",
-                                    linkedin: "https://linkedin.com/",
-                                    twitter: "https://twitter.com/"
+                                    github: "https://github.com/Hasalawa",
+                                    linkedin: "https://www.linkedin.com/in/kehan-hasalawa-a93027196/",
+                                    facebook: "https://www.facebook.com/hewa.k.hasalawa"
                                 }
                             },
                             {
                                 name: "Tharindra Dasuni",
                                 role: "Co-Founder",
-                                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800",
+                                img: tharindraImg,
                                 socials: {
-                                    linkedin: "https://linkedin.com/"
+                                    github: "https://github.com/TharindraDasuni",
+                                    linkedin: "https://www.linkedin.com/in/tharindradasuni/"
+
                                 }
                             },
                             {
-                                name: "Sahan  Dilshan",
+                                name: "Sahan Dilshan",
                                 role: "CEO",
-                                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800",
+                                img: sahanImg,
                                 socials: {
-                                    github: "https://github.com/",
-                                    twitter: "https://twitter.com/"
+                                    github: "https://github.com/Sahan20030814",
+                                    linkedin: "https://www.linkedin.com/in/sahan-dilshan-9a586a331/",
+                                    facebook: "https://www.facebook.com/profile.php?id=100078910270762"
                                 }
                             },
                             {
                                 name: "Thushara Jayanga",
                                 role: "CTO",
-                                img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800",
+                                img: thusharaImg,
                                 socials: {
-                                    github: "https://github.com/",
-                                    twitter: "https://twitter.com/"
+                                    github: "https://github.com/thusharaJIAT",
+                                    linkedin: "https://www.linkedin.com/in/thushara-jayanga-b3bb73390/"
                                 }
                             },
                             {
                                 name: "Prasanna Lakshan",
                                 role: "Software Engineer",
-                                img: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&q=80&w=800",
+                                img: prasannaImg,
                                 socials: {
-                                    github: "https://github.com/",
-                                    twitter: "https://twitter.com/"
+                                    github: "https://github.com/shan2003034",
+                                    linkedin: "https://www.linkedin.com/in/prasannalakshan/"
                                 }
                             },
                             {
                                 name: "Krishan Chirantha",
                                 role: "Software Engineer",
-                                img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=800",
+                                img: krishanImg,
                                 socials: {
-                                    github: "https://github.com/",
-                                    twitter: "https://twitter.com/"
+                                    github: "https://github.com/kishan-chirantha",
+                                    linkedin: "https://www.linkedin.com/in/kishan-chirantha-9b03502a5/"
                                 }
                             }
                         ].map((member, idx) => (

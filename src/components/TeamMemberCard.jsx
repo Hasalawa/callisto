@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Tilt from 'react-parallax-tilt';
-import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
+import { FaGithub, FaLinkedinIn, FaFacebook } from 'react-icons/fa6';
 
 export default function TeamMemberCard({ name, role, img, socials = {} }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -31,7 +31,7 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
                 } else {
                     clearInterval(roleInterval);
                 }
-            }, 40); 
+            }, 40);
 
             return () => {
                 clearInterval(nameInterval);
@@ -43,7 +43,7 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
         }
     }, [isHovered, name, role]);
 
-    const hasSocials = socials.github || socials.linkedin || socials.twitter;
+    const hasSocials = socials.github || socials.linkedin || socials.facebook;
 
     return (
         <Tilt
@@ -62,7 +62,7 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
         >
             <div className="relative aspect-[3/4] w-full h-full">
                 <div className="absolute inset-0 bg-neutral-950/40 lg:group-hover:bg-transparent transition-colors duration-500 z-10" />
-                
+
                 {/* Mobile: වර්ණවත් බව (grayscale-0) සහ පැහැදිලි බව (opacity-100)
                     Desktop (lg): කළු-සුදු (lg:grayscale) සහ බොඳ වීම (lg:opacity-70) 
                 */}
@@ -71,7 +71,7 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
                     alt={name}
                     className="w-full h-full object-cover filter grayscale-0 opacity-100 lg:grayscale lg:opacity-70 lg:group-hover:grayscale-0 lg:group-hover:opacity-100 transition-all duration-700"
                 />
-                
+
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-20 opacity-100 lg:opacity-90 lg:group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* --- Responsive Social Icons Section --- */}
@@ -80,7 +80,7 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
                         Desktop (lg): Icons හැංගිලා තියෙන්නේ, Hover කරාම එනවා (lg:opacity-0 lg:translate-x-4)
                     */
                     <div className="absolute top-4 right-4 flex flex-col gap-3 z-30 opacity-100 translate-x-0 lg:opacity-0 lg:translate-x-4 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 transition-all duration-500 delay-100">
-                        
+
                         {socials.github && (
                             <a href={socials.github} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-gray-200 hover:bg-red-500 hover:text-white transition-all duration-300 border border-white/20 hover:border-red-500 hover:scale-110">
                                 <FaGithub size={18} />
@@ -93,9 +93,9 @@ export default function TeamMemberCard({ name, role, img, socials = {} }) {
                             </a>
                         )}
 
-                        {socials.twitter && (
-                            <a href={socials.twitter} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-gray-200 hover:bg-red-500 hover:text-white transition-all duration-300 border border-white/20 hover:border-red-500 hover:scale-110">
-                                <FaXTwitter size={16} />
+                        {socials.facebook && (
+                            <a href={socials.facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-gray-200 hover:bg-red-500 hover:text-white transition-all duration-300 border border-white/20 hover:border-red-500 hover:scale-110">
+                                <FaFacebook size={16} />
                             </a>
                         )}
 
