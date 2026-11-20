@@ -6,6 +6,7 @@ import ServiceDetail from './pages/ServiceDetail';
 import ProjectDetail from './pages/ProjectDetail';
 import NotFound from './pages/NotFound';
 import { LoadingScreen } from './components/PageComponents';
+import { preloadClickSound, playClickSound } from './utils/sound';
 
 // The site never changes the address itself, so "/" (and "/index.html") are the only real paths.
 // Anything else, like a mistyped address, shows the Not Found page.
@@ -24,6 +25,32 @@ const App = () => {
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 2500);
+  }, []);
+
+  // Global mouse click sound listener across all pages and components
+  useEffect(() => {
+    preloadClickSound();
+
+    const handleGlobalClick = (event) => {
+      const target = event.target;
+      if (!target || typeof target.closest !== 'function') return;
+
+      // Match any button, role="button", input buttons, links, or clickable interactive controls
+      const isClickable = target.closest(
+        'button, [role="button"], a, input[type="button"], input[type="submit"], input[type="reset"], .cursor-pointer'
+      );
+
+      if (isClickable) {
+        playClickSound();
+      }
+    };
+
+    // Use capture phase so all clicks across all pages and modals are captured reliably
+    document.addEventListener('click', handleGlobalClick, true);
+
+    return () => {
+      document.removeEventListener('click', handleGlobalClick, true);
+    };
   }, []);
 
   // Handle Navigation
