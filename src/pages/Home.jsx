@@ -484,7 +484,7 @@ const Home = ({ navigateTo }) => {
                         {[
                             {
                                 name: "Kehan Hasalawa",
-                                role: "Founder",
+                                role: "Founder / CEO",
                                 img: kehanImg,
                                 socials: {
                                     github: "https://github.com/Hasalawa",
@@ -504,7 +504,7 @@ const Home = ({ navigateTo }) => {
                             },
                             {
                                 name: "Sahan Dilshan",
-                                role: "CEO",
+                                role: "Director / CFO",
                                 img: sahanImg,
                                 socials: {
                                     github: "https://github.com/Sahan20030814",
@@ -514,7 +514,7 @@ const Home = ({ navigateTo }) => {
                             },
                             {
                                 name: "Thushara Jayanga",
-                                role: "CTO",
+                                role: "Director / CTO",
                                 img: thusharaImg,
                                 socials: {
                                     github: "https://github.com/thusharaJIAT",
@@ -523,7 +523,7 @@ const Home = ({ navigateTo }) => {
                             },
                             {
                                 name: "Prasanna Lakshan",
-                                role: "Software Engineer",
+                                role: "Director / Software Engineer",
                                 img: prasannaImg,
                                 socials: {
                                     github: "https://github.com/shan2003034",
@@ -532,7 +532,7 @@ const Home = ({ navigateTo }) => {
                             },
                             {
                                 name: "Krishan Chirantha",
-                                role: "Software Engineer",
+                                role: "Director / Software Engineer",
                                 img: krishanImg,
                                 socials: {
                                     github: "https://github.com/kishan-chirantha",
